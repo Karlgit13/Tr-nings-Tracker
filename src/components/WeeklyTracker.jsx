@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import React from "react";
+import "../styles/weeklyTracker.css";
 
 const WeeklyTracker = ({ muscleGroups }) => {
-  // Skapa en state för att hålla koll på tränade muskelgrupper
   const [trainedMuscles, setTrainedMuscles] = useState(() => {
     const initialStatus = {};
     muscleGroups.forEach((group) => {
@@ -11,7 +11,6 @@ const WeeklyTracker = ({ muscleGroups }) => {
     return initialStatus;
   });
 
-  // Funktion för att uppdatera status för en tränad muskelgrupp
   const markAsTrained = (muscleName) => {
     setTrainedMuscles((prevState) => ({
       ...prevState,
@@ -19,12 +18,10 @@ const WeeklyTracker = ({ muscleGroups }) => {
     }));
   };
 
-  // Kolla om alla muskelgrupper har tränats
   const allMusclesTrained = Object.values(trainedMuscles).every(
     (status) => status
   );
 
-  // Återställ tracker vid början av en ny vecka
   useEffect(() => {
     const resetTracker = () => {
       const resetState = {};
@@ -48,15 +45,27 @@ const WeeklyTracker = ({ muscleGroups }) => {
 
   return (
     <div>
-      <h2>Veckans Träning</h2>
-      {muscleGroups.map((group) => (
-        <div key={group.name}>
-          <button onClick={() => markAsTrained(group.name)}>
+      <div className="weekly-title-container">
+        <h2 className="weekly-title">Veckans träning</h2>
+      </div>
+      <div className="button-container">
+        {muscleGroups.map((group) => (
+          <button
+            key={group.name}
+            className={`weekly-button ${
+              trainedMuscles[group.name] ? "trained" : ""
+            }`}
+            onClick={() => markAsTrained(group.name)}
+          >
             {group.name} {trainedMuscles[group.name] ? "(Tränad)" : ""}
           </button>
-        </div>
-      ))}
-      {allMusclesTrained && <p>Alla muskler har tränats denna vecka!</p>}
+        ))}
+      </div>
+      {allMusclesTrained && (
+        <p className="uhmP">
+          Bra jobbat! <br /> Alla muskler har tränats denna vecka!
+        </p>
+      )}
     </div>
   );
 };

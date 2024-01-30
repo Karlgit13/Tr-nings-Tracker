@@ -1,6 +1,8 @@
+import "../styles/header.css";
+
 const Header = () => {
   return (
-    <header>
+    <header className="header-container">
       <h1>Träningsaktivitetsapp</h1>
     </header>
   );

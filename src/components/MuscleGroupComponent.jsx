@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
+import "../styles/muscleGroupComponent.css";
 
 const MuscleGroupComponent = () => {
   const muscleGroups = [
@@ -29,13 +30,18 @@ const MuscleGroupComponent = () => {
 
   return (
     <div>
-        <div>
-            <WeeklyTracker muscleGroups={muscleGroups}/>
-        </div>
+      <div>
+        <WeeklyTracker muscleGroups={muscleGroups} />
+      </div>
       {muscleGroups.map((group) => (
-        <div key={group.name}>
-          <h3>{group.name}</h3>
-          <button onClick={() => handleTraining(group.name)}>Tränad</button>
+        <div className="muscle-container" key={group.name}>
+          <h3 className="muscle-title">{group.name}</h3>
+          <button
+            className="muscle-buttons"
+            onClick={() => handleTraining(group.name)}
+          >
+            Tränad
+          </button>
           {isActive[group.name] && <Timer restPeriod={group.restPeriod} />}
         </div>
       ))}

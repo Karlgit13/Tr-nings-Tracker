@@ -10,3 +10,12 @@ html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
+@font-face {
+  font-family: "Karla";
+  src: url("./assets/Karla.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "MarkaziText";
+  src: url("./assets/MarkaziText.ttf") format("truetype");
+}
