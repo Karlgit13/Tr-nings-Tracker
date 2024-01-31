@@ -11,6 +11,46 @@ const WeeklyTracker = ({ muscleGroups }) => {
     return initialStatus;
   });
 
+  const muscleImages = [
+    {
+      name: "Mage",
+      src: require("../assets/abs1.png"),
+    },
+    {
+      name: "Mage1",
+      src: require("../assets/abs2.png"),
+    },
+    {
+      name: "Armar",
+      src: require("../assets/arms.png"),
+    },
+    {
+      name: "Rygg1",
+      src: require("../assets/back1.png"),
+    },
+    {
+      name: "Rygg",
+      src: require("../assets/back2.png"),
+    },
+    {
+      name: "Ben",
+      src: require("../assets/legs1.png"),
+    },
+    {
+      name: "Axlar",
+      src: require("../assets/shoulder2.png"),
+    },
+    {
+      name: "Bröst",
+      src: require("../assets/chest1.png"),
+    },
+  ];
+
+  const findMuscleImage = (muscleName) => {
+    const muscleImage = muscleImages.find((image) => image.name === muscleName);
+    return muscleImage ? muscleImage.src : undefined;
+  };
+
   const markAsTrained = (muscleName) => {
     setTrainedMuscles((prevState) => ({
       ...prevState,
@@ -57,7 +97,14 @@ const WeeklyTracker = ({ muscleGroups }) => {
             }`}
             onClick={() => markAsTrained(group.name)}
           >
-            {group.name} {trainedMuscles[group.name] ? "(Tränad)" : ""}
+            <img
+              className="muscle-image"
+              src={findMuscleImage(group.name)}
+              alt={group.name}
+            />
+            <span className="checkmark">&#10004;</span>{" "}
+            {/* Unicode checkmark */}
+            {group.name}
           </button>
         ))}
       </div>

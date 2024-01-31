@@ -3,8 +3,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: lightcoral;
-  font-family: "MarkaziText";
+  font-size: 0.6rem;
+  font-family: "Poppins";
 }
 
 .button-container {
@@ -13,29 +13,46 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: 1rem;
-  background-color: lightcoral;
+}
+.weekly-button {
+  font-family: "Poppins";
+  padding: 0px;
+  margin: 1vh 1vw;
+  flex: 0 1 100px; /* Buttons can grow and shrink but base width is 100px */
+  text-align: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
 }
 
-.weekly-button {
-  font-family: "Karla";
-  padding: 8px;
-  margin: 1vh 1vw;
-  flex: 1 1 100px; /* Buttons can grow and shrink but base width is 100px */
-  text-align: center;
-  border-radius: 4px;
-  border: 1px solid black;
-  box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4.5em;
+  color: green;
+  display: none;
+  text-shadow: 2px 4px 2px rgba(0, 0, 0, 0.5);
+}
+
+.trained .checkmark {
+  display: block; /* Show the checkmark when 'trained' class is applied */
 }
 
 .uhmP {
-  font-family: "Karla";
+  font-family: "Poppins";
   margin-top: -25px;
   text-align: center;
-  background-color: lightcoral;
   padding: 16px;
   font-weight: 700;
 }
 .trained {
-  font-family: "Karla";
+  font-family: "Poppins";
+}
+.muscle-image {
+  width: 100px;
+  height: 90px;
+  border-radius: 50%;
 }

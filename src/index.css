@@ -19,3 +19,7 @@ html {
   font-family: "MarkaziText";
   src: url("./assets/MarkaziText.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/Poppins-Regular.ttf");
+}

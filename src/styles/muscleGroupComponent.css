@@ -5,11 +5,10 @@
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  background-color: lightcyan;
   height: 100%;
 }
 .muscle-buttons {
-  font-family: "Karla";
+  font-family: "Poppins";
   padding: 8px;
   text-align: center;
   border-radius: 4px;
@@ -18,5 +17,6 @@
   cursor: pointer;
 }
 .muscle-title {
-  font-family: "MarkaziText";
+  font-family: "Poppins";
+  font-size: 0.7rem;
 }
