@@ -4,11 +4,13 @@ import "../styles/weeklyTracker.css";
 
 const WeeklyTracker = ({ muscleGroups }) => {
   const [trainedMuscles, setTrainedMuscles] = useState(() => {
-    const initialStatus = {};
-    muscleGroups.forEach((group) => {
-      initialStatus[group.name] = false;
-    });
-    return initialStatus;
+    const savedTrainedMuscles = localStorage.getItem("trainedMuscles");
+    return savedTrainedMuscles
+      ? JSON.parse(savedTrainedMuscles)
+      : muscleGroups.reduce((acc, group) => {
+          acc[group.name] = false;
+          return acc;
+        }, {});
   });
 
   const muscleImages = [
@@ -51,16 +53,34 @@ const WeeklyTracker = ({ muscleGroups }) => {
     return muscleImage ? muscleImage.src : undefined;
   };
 
+  // Funktion för att markera en muskelgrupp som tränad
   const markAsTrained = (muscleName) => {
-    setTrainedMuscles((prevState) => ({
-      ...prevState,
-      [muscleName]: true,
-    }));
+    setTrainedMuscles((prevState) => {
+      const updatedState = {
+        ...prevState,
+        [muscleName]: true,
+      };
+      localStorage.setItem("trainedMuscles", JSON.stringify(updatedState));
+      return updatedState;
+    });
   };
 
   const allMusclesTrained = Object.values(trainedMuscles).every(
     (status) => status
   );
+
+  // Läs in sparade träningsdata från localStorage när komponenten laddas
+  useEffect(() => {
+    const savedTrainedMuscles = localStorage.getItem("trainedMuscles");
+    if (savedTrainedMuscles) {
+      setTrainedMuscles(JSON.parse(savedTrainedMuscles));
+    }
+  }, []);
+
+  // Spara tillståndet av trainedMuscles i localStorage när det ändras
+  useEffect(() => {
+    localStorage.setItem("trainedMuscles", JSON.stringify(trainedMuscles));
+  }, [trainedMuscles]);
 
   useEffect(() => {
     const resetTracker = () => {
@@ -69,6 +89,7 @@ const WeeklyTracker = ({ muscleGroups }) => {
         resetState[muscle] = false;
       }
       setTrainedMuscles(resetState);
+      localStorage.setItem("trainedMuscles", JSON.stringify(resetState));
     };
 
     const now = new Date();
@@ -102,8 +123,9 @@ const WeeklyTracker = ({ muscleGroups }) => {
               src={findMuscleImage(group.name)}
               alt={group.name}
             />
-            <span className="checkmark">&#10004;</span>{" "}
-            {/* Unicode checkmark */}
+            {trainedMuscles[group.name] && (
+              <span className="checkmark">&#10004;</span>
+            )}
             {group.name}
           </button>
         ))}

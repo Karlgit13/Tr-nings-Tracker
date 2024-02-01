@@ -7,3 +7,18 @@
   font-family: "Poppins";
   font-size: 0.7rem;
 }
+.reset-button {
+  font-family: "Poppins", sans-serif;
+  padding: 0.5rem 1rem;
+  margin-left: 20px;
+  font-size: 1rem;
+  background: #f44336; /* Röd färg för återställningsknappen */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background: #d32f2f; /* Mörkare röd när man hovrar */
+}
