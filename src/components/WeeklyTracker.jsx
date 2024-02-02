@@ -14,23 +14,6 @@ const WeeklyTracker = ({ muscleGroups }) => {
         }, {});
   });
 
-  // State for tracking the current week number
-  const [currentWeek, setCurrentWeek] = useState();
-
-  // Function to calculate the current week number
-  const getWeekNumber = (date) => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-  };
-
-  // Initialize the current week number on component mount
-  useEffect(() => {
-    const today = new Date();
-    const weekNumber = getWeekNumber(today);
-    setCurrentWeek(weekNumber);
-  }, []);
-
   // Muscle image references
   const muscleImages = [
     { name: "Mage", src: require("../assets/abs1.png") },
@@ -101,9 +84,7 @@ const WeeklyTracker = ({ muscleGroups }) => {
 
   return (
     <div>
-      <div className="weekly-title-container">
-        <h2 className="weekly-title">Vecka {currentWeek} träning</h2>
-      </div>
+      <div className="weekly-title-container"></div>
       <div className="button-container">
         {muscleGroups.map((group) => (
           <button
