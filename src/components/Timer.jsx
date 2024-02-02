@@ -9,7 +9,9 @@ const Timer = ({ restPeriod, muscleName }) => {
     if (endTime) {
       const remainingTime = parseInt(endTime, 10) - now;
       // Returnera återstående tid i sekunder om det finns tid kvar, annars sätt till restPeriod
-      return remainingTime > 0 ? Math.floor(remainingTime / 1000) : restPeriod * 3600;
+      return remainingTime > 0
+        ? Math.floor(remainingTime / 1000)
+        : restPeriod * 3600;
     } else {
       // Om inget slutdatum finns, sätt till restPeriod
       return restPeriod * 3600;
@@ -53,7 +55,9 @@ const Timer = ({ restPeriod, muscleName }) => {
 
   return (
     <div>
-      <p>Nästa träningspass om: {formatTime(Math.max(timeLeft, 0))}</p>
+      <p className="p-timer">
+        Återhämtning: {formatTime(Math.max(timeLeft, 0))}
+      </p>
     </div>
   );
 };

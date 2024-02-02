@@ -6,14 +6,13 @@
   font-family: "Poppins";
   font-size: 0.7rem;
   padding: 0.5rem;
-  margin: 0;
 }
 .reset-button {
   font-family: "Poppins", sans-serif;
   padding: 0.5rem;
   font-size: 1rem;
   background: #f44336;
-  color: white;
+  color: #edefee;
   border: none;
   border-radius: 5px;
   cursor: pointer;

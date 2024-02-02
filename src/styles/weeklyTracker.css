@@ -2,9 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   font-size: 0.6rem;
   font-family: "Poppins";
+  color: #edefee;
+  text-shadow: 2px 4px 2px rgba(0, 0, 0, 0.5);
 }
 
 .button-container {
@@ -16,6 +17,7 @@
 }
 .weekly-button {
   font-family: "Poppins";
+  color: #edefee;
   padding: 0px;
   margin: 1vh 1vw;
   flex: 0 1 100px; /* Buttons can grow and shrink but base width is 100px */
@@ -24,6 +26,7 @@
   border: none;
   cursor: pointer;
   position: relative;
+  text-shadow: 2px 4px 2px rgba(0, 0, 0, 0.5);
 }
 
 .checkmark {
