@@ -1,10 +1,10 @@
 import React from "react";
-import MuscleGroupComponent from "./components/MainComponent";
+import MainComponent from "./components/MainComponent";
 
 function App() {
   return (
     <div className="App">
-      <MuscleGroupComponent />
+      <MainComponent />
     </div>
   );
 }
