@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
-import "../styles/MainComponent.css";
 import Header from "./Header";
+import "../styles/MainComponent.css";
 
 const MainComponent = () => {
+  // Initial setup of muscle groups with their respective rest periods
   const muscleGroups = [
     { name: "Bröst", restPeriod: 48 },
     { name: "Rygg", restPeriod: 48 },
@@ -14,6 +15,7 @@ const MainComponent = () => {
     { name: "Mage", restPeriod: 24 },
   ];
 
+  // State for tracking trained muscles and their active status
   const [trainedMuscles, setTrainedMuscles] = useState(() => {
     const savedTrainedMuscles = localStorage.getItem("trainedMuscles");
     return savedTrainedMuscles ? JSON.parse(savedTrainedMuscles) : {};
@@ -23,54 +25,41 @@ const MainComponent = () => {
     return savedIsActive ? JSON.parse(savedIsActive) : {};
   });
 
+  // Handler for marking a muscle group as trained
   const handleTraining = (groupName) => {
-    const newIsActive = {
-      ...isActive,
-      [groupName]: true,
-    };
+    const newIsActive = { ...isActive, [groupName]: true };
     setIsActive(newIsActive);
-
-    // Spara det uppdaterade tillståndet i localStorage
-    localStorage.setItem("isActive", JSON.stringify(newIsActive));
+    localStorage.setItem("isActive", JSON.stringify(newIsActive)); // Save updated state to localStorage
   };
 
+  // Reset all training statuses to false
   const resetTraining = () => {
-    // Skapa ett nytt state-objekt för att återställa alla muskelgrupper till false
     const resetState = muscleGroups.reduce((state, group) => {
       state[group.name] = false;
       return state;
     }, {});
 
-    // Rensa localStorage först
+    // Clear related localStorage items
     muscleGroups.forEach((group) => {
       localStorage.removeItem(`timerEnd-${group.name}`);
       localStorage.removeItem(`timer-${group.name}`);
     });
 
-    // Uppdatera state med det nya resetState-objektet
+    // Update state and localStorage with the reset state
     setTrainedMuscles(resetState);
     setIsActive(resetState);
-
-    // Uppdatera localStorage med det nya resetState-objektet
     localStorage.setItem("trainedMuscles", JSON.stringify(resetState));
     localStorage.setItem("isActive", JSON.stringify(resetState));
-
-    // Trigger en re-render av Timer-komponenterna genom att ändra en state-variabel
-    // som används som nyckel för Timer-komponenterna
   };
 
   return (
     <div>
-      <div>
-        <Header resetTraining={resetTraining} />
-      </div>
-      <div>
-        <WeeklyTracker
-          muscleGroups={muscleGroups}
-          trainedMuscles={trainedMuscles}
-          setTrainedMuscles={setTrainedMuscles}
-        />
-      </div>
+      <Header resetTraining={resetTraining} />
+      <WeeklyTracker
+        muscleGroups={muscleGroups}
+        trainedMuscles={trainedMuscles}
+        setTrainedMuscles={setTrainedMuscles}
+      />
       {muscleGroups.map((group) => (
         <div className="muscle-container" key={group.name}>
           <h3 className="muscle-title">{group.name}</h3>
@@ -82,7 +71,7 @@ const MainComponent = () => {
           </button>
           {isActive[group.name] && (
             <Timer
-              key={Date.now()} // En unik nyckel som tvingar återmontering
+              key={Date.now()} // Forces re-mount to reset timer
               restPeriod={group.restPeriod}
               muscleName={group.name}
             />

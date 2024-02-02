@@ -1,33 +1,33 @@
 import { useEffect, useState } from "react";
 
 const Timer = ({ restPeriod, muscleName }) => {
+  // Initial state setup using localStorage data or default to restPeriod
   const [timeLeft, setTimeLeft] = useState(() => {
-    // Försök att hämta slutdatumet från localStorage
     const endTime = localStorage.getItem(`timerEnd-${muscleName}`);
     const now = Date.now();
 
     if (endTime) {
       const remainingTime = parseInt(endTime, 10) - now;
-      // Returnera återstående tid i sekunder om det finns tid kvar, annars sätt till restPeriod
+      // Return remaining time in seconds if any, else default to restPeriod
       return remainingTime > 0
         ? Math.floor(remainingTime / 1000)
         : restPeriod * 3600;
     } else {
-      // Om inget slutdatum finns, sätt till restPeriod
+      // Default to restPeriod if no end time is stored
       return restPeriod * 3600;
     }
   });
 
   useEffect(() => {
-    // Beräkna och spara slutdatumet i localStorage när timern startar
+    // Calculate and store the end time in localStorage when timer starts
     const endTime = Date.now() + timeLeft * 1000;
     localStorage.setItem(`timerEnd-${muscleName}`, endTime.toString());
 
-    // Starta en timer som räknar ner varje sekund
+    // Start a countdown timer
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         const newTime = prevTime - 1;
-        // Om tiden är ute, rensa slutdatumet från localStorage
+        // Clear the end time from localStorage when timer runs out
         if (newTime <= 0) {
           localStorage.removeItem(`timerEnd-${muscleName}`);
         }
@@ -35,16 +35,16 @@ const Timer = ({ restPeriod, muscleName }) => {
       });
     }, 1000);
 
-    // Rensa timer när komponenten unmounts
+    // Clean up on component unmount
     return () => {
       clearInterval(timer);
-      // Uppdatera också localStorage med kvarvarande tid om komponenten avlägsnas före tiden är ute
+      // Update localStorage with remaining time if component unmounts before time runs out
       const remainingTime = Date.now() + timeLeft * 1000;
       localStorage.setItem(`timerEnd-${muscleName}`, remainingTime.toString());
     };
   }, [muscleName, timeLeft]);
 
-  // Funktion för att omvandla sekunder till dagar, timmar och minuter
+  // Function to convert seconds into a more readable format
   const formatTime = (seconds) => {
     const days = Math.floor(seconds / (3600 * 24));
     const hours = Math.floor((seconds % (3600 * 24)) / 3600);

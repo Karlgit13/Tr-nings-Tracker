@@ -3,6 +3,7 @@ import React from "react";
 import "../styles/weeklyTracker.css";
 
 const WeeklyTracker = ({ muscleGroups }) => {
+  // State for tracking the training status of each muscle group
   const [trainedMuscles, setTrainedMuscles] = useState(() => {
     const savedTrainedMuscles = localStorage.getItem("trainedMuscles");
     return savedTrainedMuscles
@@ -13,63 +14,56 @@ const WeeklyTracker = ({ muscleGroups }) => {
         }, {});
   });
 
+  // State for tracking the current week number
+  const [currentWeek, setCurrentWeek] = useState();
+
+  // Function to calculate the current week number
+  const getWeekNumber = (date) => {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  };
+
+  // Initialize the current week number on component mount
+  useEffect(() => {
+    const today = new Date();
+    const weekNumber = getWeekNumber(today);
+    setCurrentWeek(weekNumber);
+  }, []);
+
+  // Muscle image references
   const muscleImages = [
-    {
-      name: "Mage",
-      src: require("../assets/abs1.png"),
-    },
-    {
-      name: "Mage1",
-      src: require("../assets/abs2.png"),
-    },
-    {
-      name: "Armar",
-      src: require("../assets/arms.png"),
-    },
-    {
-      name: "Rygg1",
-      src: require("../assets/back1.png"),
-    },
-    {
-      name: "Rygg",
-      src: require("../assets/back2.png"),
-    },
-    {
-      name: "Ben",
-      src: require("../assets/legs1.png"),
-    },
-    {
-      name: "Axlar",
-      src: require("../assets/shoulder2.png"),
-    },
-    {
-      name: "Bröst",
-      src: require("../assets/chest1.png"),
-    },
+    { name: "Mage", src: require("../assets/abs1.png") },
+    { name: "Mage1", src: require("../assets/abs2.png") },
+    { name: "Armar", src: require("../assets/arms.png") },
+    { name: "Rygg1", src: require("../assets/back1.png") },
+    { name: "Rygg", src: require("../assets/back2.png") },
+    { name: "Ben", src: require("../assets/legs1.png") },
+    { name: "Axlar", src: require("../assets/shoulder2.png") },
+    { name: "Bröst", src: require("../assets/chest1.png") },
   ];
 
+  // Function to find a muscle image by name
   const findMuscleImage = (muscleName) => {
     const muscleImage = muscleImages.find((image) => image.name === muscleName);
     return muscleImage ? muscleImage.src : undefined;
   };
 
-  // Funktion för att markera en muskelgrupp som tränad
+  // Function to mark a muscle group as trained
   const markAsTrained = (muscleName) => {
     setTrainedMuscles((prevState) => {
-      const updatedState = {
-        ...prevState,
-        [muscleName]: true,
-      };
+      const updatedState = { ...prevState, [muscleName]: true };
       localStorage.setItem("trainedMuscles", JSON.stringify(updatedState));
       return updatedState;
     });
   };
 
+  // Check if all muscles have been trained
   const allMusclesTrained = Object.values(trainedMuscles).every(
     (status) => status
   );
 
-  // Läs in sparade träningsdata från localStorage när komponenten laddas
+  // Load training data from localStorage on component mount
   useEffect(() => {
     const savedTrainedMuscles = localStorage.getItem("trainedMuscles");
     if (savedTrainedMuscles) {
@@ -77,17 +71,18 @@ const WeeklyTracker = ({ muscleGroups }) => {
     }
   }, []);
 
-  // Spara tillståndet av trainedMuscles i localStorage när det ändras
+  // Save the trainedMuscles state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("trainedMuscles", JSON.stringify(trainedMuscles));
   }, [trainedMuscles]);
 
+  // Setup a timer to reset the tracker at the beginning of a new week
   useEffect(() => {
     const resetTracker = () => {
-      const resetState = {};
-      for (let muscle in trainedMuscles) {
-        resetState[muscle] = false;
-      }
+      const resetState = Object.keys(trainedMuscles).reduce((acc, muscle) => {
+        acc[muscle] = false;
+        return acc;
+      }, {});
       setTrainedMuscles(resetState);
       localStorage.setItem("trainedMuscles", JSON.stringify(resetState));
     };
@@ -107,7 +102,7 @@ const WeeklyTracker = ({ muscleGroups }) => {
   return (
     <div>
       <div className="weekly-title-container">
-        <h2 className="weekly-title">Veckans träning</h2>
+        <h2 className="weekly-title">Vecka {currentWeek} träning</h2>
       </div>
       <div className="button-container">
         {muscleGroups.map((group) => (

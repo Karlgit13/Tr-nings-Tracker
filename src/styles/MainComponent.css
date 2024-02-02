@@ -8,6 +8,12 @@
   height: 100%;
   color: #edefee;
 }
+@media (min-width: 689px) {
+  .muscle-container {
+    justify-content: center;
+    align-items: center;
+  }
+}
 .muscle-buttons {
   margin: 5px;
   font-family: "Poppins";
@@ -22,7 +28,7 @@
 .muscle-title {
   width: 50px;
   font-family: "Poppins";
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-shadow: 2px 4px 2px rgba(0, 0, 0, 0.5);
 }
