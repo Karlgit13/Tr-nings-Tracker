@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Tr-nings-Tracker/static/css/main.910dfa87.css",
-    "main.js": "/Tr-nings-Tracker/static/js/main.12590186.js",
+    "main.css": "/Tr-nings-Tracker/static/css/main.3ecb5800.css",
+    "main.js": "/Tr-nings-Tracker/static/js/main.610e409a.js",
     "static/media/chest1.png": "/Tr-nings-Tracker/static/media/chest1.ed1117e54e21a189ff8a.png",
     "static/media/back2.png": "/Tr-nings-Tracker/static/media/back2.4cd32e6f04624920c76c.png",
     "static/media/abs1.png": "/Tr-nings-Tracker/static/media/abs1.effc35dc791574f14b94.png",
@@ -15,11 +15,11 @@
     "static/media/nylogo.webp": "/Tr-nings-Tracker/static/media/nylogo.1f6d3a5d2b31c692a618.webp",
     "static/media/Karla.ttf": "/Tr-nings-Tracker/static/media/Karla.1d835e644ae4118a28fc.ttf",
     "index.html": "/Tr-nings-Tracker/index.html",
-    "main.910dfa87.css.map": "/Tr-nings-Tracker/static/css/main.910dfa87.css.map",
-    "main.12590186.js.map": "/Tr-nings-Tracker/static/js/main.12590186.js.map"
+    "main.3ecb5800.css.map": "/Tr-nings-Tracker/static/css/main.3ecb5800.css.map",
+    "main.610e409a.js.map": "/Tr-nings-Tracker/static/js/main.610e409a.js.map"
   },
   "entrypoints": [
-    "static/css/main.910dfa87.css",
-    "static/js/main.12590186.js"
+    "static/css/main.3ecb5800.css",
+    "static/js/main.610e409a.js"
   ]
 }
