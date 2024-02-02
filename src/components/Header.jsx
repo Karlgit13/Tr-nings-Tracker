@@ -1,4 +1,5 @@
 import "../styles/header.css";
+import Logo from "../assets/nylogo.webp";
 
 const Header = ({ resetTraining }) => {
   function refreshPage() {
@@ -7,7 +8,12 @@ const Header = ({ resetTraining }) => {
 
   return (
     <header className="header-container">
-      <h1>Träningsaktivitetsapp</h1>
+      <img
+        onClick={refreshPage}
+        className="header-logo"
+        src={Logo}
+        alt="logo"
+      />
       <button
         className="reset-button"
         onClick={() => {
@@ -15,7 +21,7 @@ const Header = ({ resetTraining }) => {
           refreshPage();
         }}
       >
-        Reset
+        Återställ
       </button>
     </header>
   );
