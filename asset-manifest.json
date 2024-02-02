@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Tr-nings-Tracker/static/css/main.910dfa87.css",
+    "main.js": "/Tr-nings-Tracker/static/js/main.12590186.js",
+    "static/media/chest1.png": "/Tr-nings-Tracker/static/media/chest1.ed1117e54e21a189ff8a.png",
+    "static/media/back2.png": "/Tr-nings-Tracker/static/media/back2.4cd32e6f04624920c76c.png",
+    "static/media/abs1.png": "/Tr-nings-Tracker/static/media/abs1.effc35dc791574f14b94.png",
+    "static/media/back1.png": "/Tr-nings-Tracker/static/media/back1.f2c128514c933a189047.png",
+    "static/media/legs1.png": "/Tr-nings-Tracker/static/media/legs1.598e6fce8f42b386beaa.png",
+    "static/media/shoulder2.png": "/Tr-nings-Tracker/static/media/shoulder2.8879007df432eab84b02.png",
+    "static/media/arms.png": "/Tr-nings-Tracker/static/media/arms.e48b61ed39b3285eb544.png",
+    "static/media/abs2.png": "/Tr-nings-Tracker/static/media/abs2.ad4742d3ae7107b54c57.png",
+    "static/media/MarkaziText.ttf": "/Tr-nings-Tracker/static/media/MarkaziText.526f74ab0f94c23b4047.ttf",
+    "static/media/Poppins-Regular.ttf": "/Tr-nings-Tracker/static/media/Poppins-Regular.35d26b781dc5fda684cc.ttf",
+    "static/media/nylogo.webp": "/Tr-nings-Tracker/static/media/nylogo.1f6d3a5d2b31c692a618.webp",
+    "static/media/Karla.ttf": "/Tr-nings-Tracker/static/media/Karla.1d835e644ae4118a28fc.ttf",
+    "index.html": "/Tr-nings-Tracker/index.html",
+    "main.910dfa87.css.map": "/Tr-nings-Tracker/static/css/main.910dfa87.css.map",
+    "main.12590186.js.map": "/Tr-nings-Tracker/static/js/main.12590186.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.910dfa87.css",
+    "static/js/main.12590186.js"
+  ]
+}
