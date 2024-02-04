@@ -72,7 +72,8 @@ const WeeklyTracker = ({ muscleGroups }) => {
 
     const now = new Date();
     const nextReset = new Date(now);
-    const daysUntilNextMonday = (7 - now.getDay() + 1) % 7;
+    const daysUntilNextMonday = now.getDay() === 0 ? 1 : 7 - now.getDay() + 1;
+
     nextReset.setDate(now.getDate() + daysUntilNextMonday);
     nextReset.setHours(0, 0, 0, 0);
 

@@ -12,9 +12,13 @@ const Header = ({ resetTraining }) => {
 
   // Function to calculate the current week number
   const getWeekNumber = (date) => {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    const newDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    newDate.setUTCDate(newDate.getUTCDate() + 4 - (newDate.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(newDate.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil(((newDate - yearStart) / 86400000 + 1) / 7);
+    return weekNo;
   };
 
   // Initialize the current week number on component mount
