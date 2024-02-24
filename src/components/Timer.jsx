@@ -60,7 +60,7 @@ const Timer = ({ restPeriod, muscleName }) => {
 
   // Component render
   return (
-    <div>
+    <div className="Timer">
       <p className="p-timer">
         Återhämtning: {formatTime(Math.max(timeLeft, 0))}
       </p>

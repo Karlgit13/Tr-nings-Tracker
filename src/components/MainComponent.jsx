@@ -8,12 +8,17 @@ const MainComponent = () => {
   const { isActive, muscleGroups, handleTraining } = useMuscle();
 
   return (
-    <div>
+    <div className="MainComponent">
       <Header />
       <WeeklyTracker />
       {muscleGroups.map((group) => (
-        <div className="flex flex-col items-center justify-center text-center text-[#edefee] my-4" key={group.name}>
-          <h3 className="font-poppins text-sm font-bold mb-2 shadow-lg">{group.name}</h3>
+        <div
+          className="flex flex-col items-center justify-center text-center text-[#edefee] my-4"
+          key={group.name}
+        >
+          <h3 className="font-poppins text-sm font-bold mb-2 shadow-lg">
+            {group.name}
+          </h3>
           <button
             className="bg-red-500 text-white p-2 rounded-lg border border-black shadow-md cursor-pointer hover:bg-red-700 transition-colors mx-2 font-poppins font-semibold"
             onClick={() => handleTraining(group.name)}
