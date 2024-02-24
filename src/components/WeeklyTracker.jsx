@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/weeklyTracker.css";
 import { useMuscle } from "./MuscleContext";
 
 const WeeklyTracker = () => {
@@ -10,32 +9,36 @@ const WeeklyTracker = () => {
     markAsTrained,
     allMusclesTrained,
   } = useMuscle();
+
   return (
     <div>
-      <div className="weekly-title-container"></div>
-      <div className="button-container">
+      <div className="flex justify-center items-center"></div>
+      <div className="flex flex-row justify-center flex-wrap p-4">
         {muscleGroups.map((group) => (
           <button
             key={group.name}
-            className={`weekly-button ${
-              trainedMuscles[group.name] ? "trained" : ""
+            className={`font-poppins text-[#edefee]  m-[1vw] flex-1 text-center bg-transparent border-none cursor-pointer relative text-shadow shadow-lg ${
+              trainedMuscles[group.name] ? "opacity-50" : ""
             }`}
             onClick={() => markAsTrained(group.name)}
+            style={{ minWidth: "100px" }}
           >
             <img
-              className="muscle-image"
+              className="w-[100px] h-[90px] rounded-full"
               src={findMuscleImage(group.name)}
               alt={group.name}
             />
             {trainedMuscles[group.name] && (
-              <span className="checkmark">&#10004;</span>
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-green-700">
+                &#10004;
+              </span>
             )}
             {group.name}
           </button>
         ))}
       </div>
       {allMusclesTrained && (
-        <p className="uhmP">
+        <p className="font-poppins mt-[-10px] text-center p-4 font-bold text-shadow shadow-lg text-red-500">
           Bra jobbat! <br /> Alla muskler har tränats denna vecka!
         </p>
       )}

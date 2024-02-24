@@ -2,7 +2,6 @@ import React from "react";
 import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
 import Header from "./Header";
-import "../styles/MainComponent.css";
 import { useMuscle } from "./MuscleContext";
 
 const MainComponent = () => {
@@ -13,10 +12,10 @@ const MainComponent = () => {
       <Header />
       <WeeklyTracker />
       {muscleGroups.map((group) => (
-        <div className="muscle-container" key={group.name}>
-          <h3 className="muscle-title">{group.name}</h3>
+        <div className="flex flex-col items-center justify-center text-center text-[#edefee] my-4" key={group.name}>
+          <h3 className="font-poppins text-sm font-bold mb-2 shadow-lg">{group.name}</h3>
           <button
-            className="muscle-buttons"
+            className="bg-red-500 text-white p-2 rounded-lg border border-black shadow-md cursor-pointer hover:bg-red-700 transition-colors mx-2 font-poppins font-semibold"
             onClick={() => handleTraining(group.name)}
           >
             Tränad

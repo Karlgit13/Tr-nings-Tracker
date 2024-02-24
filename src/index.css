@@ -1,8 +1,11 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html {
   padding: 0;
   margin: 0;
-  width: 100vw;
-  height: 100vh;
   background-image: radial-gradient(
       circle at 39% 47%,
       rgba(107, 107, 107, 0.08) 0%,
@@ -31,16 +34,12 @@ body {
       rgba(7, 7, 7, 0.08) 99.999%
     ),
     linear-gradient(45deg, rgb(97, 14, 117), rgb(20, 32, 127));
-
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
-html {
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
+
 @font-face {
   font-family: "Karla";
   src: url("./assets/Karla.ttf") format("truetype");
