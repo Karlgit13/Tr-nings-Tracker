@@ -7,31 +7,22 @@ function RegisterPage() {
   const [error, setError] = useState("");
 
   const validateForm = () => {
-    if (!name || !password || !email) {
-      setError("Alla fält måste fyllas i.");
-      return false;
-    }
-    if (password.length < 6) {
+    if (!name || !password || !email) setError("Alla fält måste fyllas i.");
+    else if (password.length < 6)
       setError("Lösenordet måste vara minst 6 tecken långt.");
-      return false;
-    }
-    if (!email.includes("@")) {
-      setError("E-postadressen är inte giltig.");
-      return false;
-    }
-    setError("");
-    return true;
+    else if (!email.includes("@")) setError("E-postadressen är inte giltig.");
+    else setError("");
+
+    return !error;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
-      const response = await fetch("http://localhost:5000/users", {
+      const response = await fetch("/api/register", {
+        // Uppdaterad till serverlös funktion på Vercel
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, password, email }),
@@ -42,7 +33,8 @@ function RegisterPage() {
         setEmail("");
         alert("Registrering lyckades");
       } else {
-        console.error("Registrering misslyckades");
+        const data = await response.json();
+        setError(data.message);
       }
     } catch (error) {
       console.error("Ett fel uppstod", error);
@@ -66,7 +58,7 @@ function RegisterPage() {
           Lösenord:
           <input
             type="password"
-            minLength={6}
+            minLength="6"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
