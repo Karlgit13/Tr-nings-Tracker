@@ -1,28 +1,43 @@
 import React, { useState } from "react";
 
-function LoginPage() {
-  const [email, setEmail] = useState("");
+function RegisterPage() {
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+
+  const validateForm = () => {
+    if (!name || !password || !email) setError("Alla fält måste fyllas i.");
+    else if (password.length < 6)
+      setError("Lösenordet måste vara minst 6 tecken långt.");
+    else if (!email.includes("@")) setError("E-postadressen är inte giltig.");
+    else setError("");
+
+    return !error;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("/api/register", {
+        // Uppdaterad till serverlös funktion på Vercel
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, password, email }),
       });
-      const data = await response.json();
       if (response.ok) {
-        console.log("Inloggning lyckades", data);
-        // Spara den inloggade användarens data, t.ex. i en global state eller i localStorage
+        setName("");
+        setPassword("");
+        setEmail("");
+        alert("Registrering lyckades");
       } else {
-        setError(data.message); // Antag att servern skickar tillbaka ett felmeddelande
+        const data = await response.json();
+        setError(data.message);
       }
     } catch (error) {
       console.error("Ett fel uppstod", error);
-      setError("Ett fel uppstod vid inloggning.");
     }
   };
 
@@ -31,27 +46,37 @@ function LoginPage() {
       <form onSubmit={handleSubmit}>
         {error && <p>{error}</p>}
         <label>
-          Email
+          Namn:
           <input
             type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </label>
         <label>
           Lösenord:
           <input
             type="password"
+            minLength="6"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button type="submit">Logga in</button>
+        <label>
+          Email:
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+        <button type="submit">Registrera</button>
       </form>
     </div>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
