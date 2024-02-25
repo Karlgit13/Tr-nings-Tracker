@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const User = require('./User');
 
 const connectToDatabase = async () => {
     if (mongoose.connection.readyState >= 1) return;
@@ -8,8 +9,6 @@ const connectToDatabase = async () => {
 
 module.exports = async (req, res) => {
     await connectToDatabase();
-
-    const User = mongoose.model('User'); // Antag att modellen redan är definierad globalt
 
     const { email, password } = req.body;
 
