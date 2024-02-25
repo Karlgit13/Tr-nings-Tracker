@@ -1,6 +1,13 @@
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
-const User = require('./User'); // Import the User model directly
+
+let db;
+
+const connectToDatabase = async () => {
+    if (db) return;
+    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    db = client.db(); // database object
+};
 
 module.exports = async (req, res) => {
     console.log('Request received', req.method, req.body);
@@ -12,7 +19,7 @@ module.exports = async (req, res) => {
 
     try {
         console.log('Connecting to MongoDB');
-        await mongoose.connect(process.env.MONGODB_URI);
+        await connectToDatabase();
         console.log('Connected to MongoDB');
 
         const { name, email, password } = req.body;
@@ -23,23 +30,19 @@ module.exports = async (req, res) => {
         console.log('Password hashed');
 
         console.log('Creating new user');
-        const newUser = new User({
+        const newUser = {
             name,
             email,
             password: hashedPassword,
-        });
+        };
 
         console.log('Saving new user');
-        await newUser.save();
-        console.log('User saved', newUser._id);
+        const result = await db.collection('users').insertOne(newUser);
+        console.log('User saved', result.insertedId);
 
-        res.status(201).json({ message: 'User created successfully', userId: newUser._id });
+        res.status(201).json({ message: 'User created successfully', userId: result.insertedId });
     } catch (error) {
         console.error('An error occurred', error);
         res.status(500).json({ error: error.message });
-    } finally {
-        console.log('Closing MongoDB connection');
-        await mongoose.connection.close();
-        console.log('MongoDB connection closed');
     }
 };

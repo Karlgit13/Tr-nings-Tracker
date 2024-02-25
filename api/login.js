@@ -1,10 +1,13 @@
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const User = require('./User');
 
+let db;
+
 const connectToDatabase = async () => {
-    if (mongoose.connection.readyState >= 1) return;
-    return mongoose.connect(process.env.MONGODB_URI);
+    if (db) return;
+    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    db = client.db(); // database object
 };
 
 module.exports = async (req, res) => {
@@ -13,7 +16,7 @@ module.exports = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await db.collection('users').findOne({ email });
         if (!user) return res.status(404).json({ message: 'Användare hittades inte' });
 
         const isMatch = await bcrypt.compare(password, user.password);
