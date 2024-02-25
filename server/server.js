@@ -4,8 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+
 // Route imports
 const userRoutes = require('./routes/userRoutes');
+const loginRoutes = require("./routes/loginRoutes")
 
 // Model imports
 const User = require("./models/User");
@@ -20,6 +22,7 @@ app.use(express.json()); // Parse JSON in incoming requests
 
 // Routes setup
 app.use(userRoutes); // Mount user routes
+app.use(loginRoutes)
 
 // Connect to MongoDB and start the server
 mongoose.connect(process.env.MONGODB_URI, {
@@ -28,13 +31,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
     .then(() => {
         console.log('Connected to MongoDB');
-
-        // Fetch all users from the database and log them
-        User.find({})
-            .then(users => {
-                console.log("DETTA ÄR USERS: ", users);
-            })
-            .catch(err => console.error(err));
 
         // Start listening for requests on the specified port
         app.listen(PORT, () => {
