@@ -1,16 +1,46 @@
+// Configurations and library imports
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
+// Route imports
 const userRoutes = require('./routes/userRoutes');
 
-const app = express();
-app.use(express.json()); // För att tolka JSON i inkommande förfrågningar
+// Model imports
+const User = require("./models/User");
 
-app.use(userRoutes); // Monterar användarrutterna
+// Initialize the Express application
+const app = express();
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB...', err));
+// Middleware setup
+app.use(cors()); // Enable CORS for all domains/origins
+app.use(express.json()); // Parse JSON in incoming requests
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Routes setup
+app.use(userRoutes); // Mount user routes
+
+// Connect to MongoDB and start the server
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => {
+        console.log('Connected to MongoDB');
+
+        // Fetch all users from the database and log them
+        User.find({})
+            .then(users => {
+                console.log("DETTA ÄR USERS: ", users);
+            })
+            .catch(err => console.error(err));
+
+        // Start listening for requests on the specified port
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Could not connect to MongoDB...', err);
+    });

@@ -10,19 +10,8 @@ export const useMuscle = () => useContext(MuscleContext);
 const MuscleProvider = ({ children }) => {
   // State declarations
   const [currentWeek, setCurrentWeek] = useState(null);
-  const [isActive, setIsActive] = useState(() => {
-    const savedIsActive = localStorage.getItem("isActive");
-    return savedIsActive ? JSON.parse(savedIsActive) : {};
-  });
-  const [trainedMuscles, setTrainedMuscles] = useState(() => {
-    const saved = localStorage.getItem("trainedMuscles");
-    return saved
-      ? JSON.parse(saved)
-      : muscleGroups.reduce(
-          (acc, group) => ({ ...acc, [group.name]: false }),
-          {}
-        );
-  });
+  const [isActive, setIsActive] = useState({});
+  const [trainedMuscles, setTrainedMuscles] = useState({});
 
   // Static data for muscle groups and images
   const muscleGroups = [
@@ -59,34 +48,32 @@ const MuscleProvider = ({ children }) => {
     muscleImages.find((image) => image.name === muscleName)?.src;
 
   const markAsTrained = (muscleName) => {
-    setTrainedMuscles((prevState) => {
-      const updated = { ...prevState, [muscleName]: true };
-      localStorage.setItem("trainedMuscles", JSON.stringify(updated));
-      return updated;
-    });
+    // Här skulle du anropa din server för att uppdatera träningsstatus för en muskelgrupp
+    // Anta att servern svarar med den uppdaterade listan av trainedMuscles
+    // Exempel:
+    // api.updateTrainedMuscle(muscleName).then(updatedMuscles => {
+    //   setTrainedMuscles(updatedMuscles);
+    // });
   };
 
   const handleTraining = (groupName) => {
-    const updatedIsActive = { ...isActive, [groupName]: true };
-    setIsActive(updatedIsActive);
-    localStorage.setItem("isActive", JSON.stringify(updatedIsActive));
+    // Liknande markAsTrained, detta skulle trigga ett API-anrop för att uppdatera vilka muskelgrupper som är aktiva
+    // Exempel:
+    // api.activateMuscleGroup(groupName).then(updatedIsActive => {
+    //   setIsActive(updatedIsActive);
+    // });
   };
 
-  const refreshPage = () => window.location.reload(false);
+  const refreshPage = () => {
+    // Denna funktion kan behöva anpassas eller tas bort beroende på hur du hanterar siduppdateringar med serverdata
+  };
 
   const resetTraining = () => {
-    const reset = muscleGroups.reduce(
-      (acc, group) => ({ ...acc, [group.name]: false }),
-      {}
-    );
-    muscleGroups.forEach((group) => {
-      localStorage.removeItem(`timerEnd-${group.name}`);
-      localStorage.removeItem(`timer-${group.name}`);
-    });
-    setTrainedMuscles(reset);
-    setIsActive(reset);
-    localStorage.setItem("trainedMuscles", JSON.stringify(reset));
-    localStorage.setItem("isActive", JSON.stringify(reset));
+    // Skicka ett anrop till servern för att återställa träningsstatus för alla muskelgrupper
+    // api.resetAllTraining().then(() => {
+    //   setTrainedMuscles({});
+    //   setIsActive({});
+    // });
   };
 
   // Effects
@@ -95,39 +82,25 @@ const MuscleProvider = ({ children }) => {
     setCurrentWeek(getWeekNumber(today));
   }, []);
 
+  // Hämta initial data från servern
   useEffect(() => {
-    const saved = localStorage.getItem("trainedMuscles");
-    if (saved) setTrainedMuscles(JSON.parse(saved));
+    // Antag att du har en funktion som gör API-anropet
+    fetch("/api/training")
+      .then((response) => response.json())
+      .then((data) => {
+        setTrainedMuscles(data.trainedMuscles);
+        setIsActive(data.isActive);
+      })
+      .catch((error) => console.error("Failed to fetch training data", error));
   }, []);
 
+  // Notera: Vi tar bort useEffect för att spara till localStorage
+  // och hanterar istället detta med API-anrop när ändringar görs.
+
+  // Denna logik kan behöva anpassas beroende på hur du hanterar återställningen server-sidan
   useEffect(() => {
-    localStorage.setItem("trainedMuscles", JSON.stringify(trainedMuscles));
-  }, [trainedMuscles]);
-
-  useEffect(() => {
-    const resetTracker = () => {
-      const reset = Object.keys(trainedMuscles).reduce(
-        (acc, muscle) => ({ ...acc, [muscle]: false }),
-        {}
-      );
-      setTrainedMuscles(reset);
-      localStorage.setItem("trainedMuscles", JSON.stringify(reset));
-    };
-
-    const now = new Date();
-    const nextReset = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + ((7 - now.getDay()) % 7),
-      0,
-      0,
-      0
-    );
-    const timeUntilReset = nextReset.getTime() - now.getTime();
-    const timer = setTimeout(resetTracker, timeUntilReset);
-
-    return () => clearTimeout(timer);
-  }, [trainedMuscles]);
+    // Exempel: Kontrollera om det är dags för återställning och gör ett API-anrop för att återställa
+  }, []);
 
   // Check if all muscles have been trained
   const allMusclesTrained = Object.values(trainedMuscles).every(
