@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const User = require('./User'); // Import the User model directly
 
 module.exports = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
 
-    await mongoose.connect(process.env.MONGODB_URI);
-
-    const User = mongoose.model('User'); // Antag att modellen redan är definierad globalt
-
-    const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     try {
+        await mongoose.connect(process.env.MONGODB_URI);
+
+        const { name, email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = new User({
             name,
             email,
