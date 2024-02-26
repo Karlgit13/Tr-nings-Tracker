@@ -11,8 +11,11 @@ const { MongoClient } = require('mongodb');
 // Importera rutt-hanterare för olika endpoints
 const registerHandler = require('./handlers/registerHandler');
 const loginHandler = require('./handlers/loginHandler');
+const trainedMuscleHandler = require("./handlers/trainedMuscleHandler")
+const trainedMuscleRoutes = require('./routes/trainedMuscleRoutes');
 const loginRoutes = require("./routes/loginRoutes");
 const userRoutes = require("./routes/userRoutes");
+const muscleGroupRoutes = require('./routes/muscleGroupRoutes');
 
 // Skapa en instans av express-appen och definiera port
 const app = express();
@@ -42,17 +45,14 @@ app.use(async (req, res, next) => {
 // Rutt-hanterare för användarregistrering och inloggning
 app.post('/api/register', registerHandler);
 app.post('/api/login', loginHandler);
-app.post('/api/trainedMuscle', async (req, res) => {
-    const { muscleName } = req.body;
-    // Här skulle du skriva logik för att uppdatera muskeln i din databas
-    // Till exempel:
-    // const result = await db.collection('muscles').updateOne({ name: muscleName }, { $set: { trained: true } });
-    // res.json(result);
-  });
+app.post('/api/trainedMuscle', trainedMuscleHandler)
+
 
 // Rutt-moduler för inloggnings- och användarrelaterade endpoints
 app.use(loginRoutes);
 app.use(userRoutes);
+app.use("/api", trainedMuscleRoutes)
+app.use('/api', muscleGroupRoutes);
 
 // Starta servern och lyssna på definierad port
 app.listen(PORT, () => {

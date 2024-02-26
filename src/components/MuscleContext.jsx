@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+// api mellanhand till back-end
+import { updateTrainedMuscle, addMuscleGroups } from "./api";
 
 // Context creation
 const MuscleContext = createContext();
@@ -48,12 +50,14 @@ const MuscleProvider = ({ children }) => {
     muscleImages.find((image) => image.name === muscleName)?.src;
 
   const markAsTrained = (muscleName) => {
-    // Här skulle du anropa din server för att uppdatera träningsstatus för en muskelgrupp
-    // Anta att servern svarar med den uppdaterade listan av trainedMuscles
-    // Exempel:
-    // api.updateTrainedMuscle(muscleName).then(updatedMuscles => {
-    //   setTrainedMuscles(updatedMuscles);
-    // });
+    updateTrainedMuscle(muscleName)
+      .then((response) => {
+        setTrainedMuscles(response.trainedMuscles);
+      })
+      .catch((error) => {
+        console.log(error);
+        console.error("failed to mark muscle as trained", error);
+      });
   };
 
   const handleTraining = (groupName) => {
@@ -82,17 +86,29 @@ const MuscleProvider = ({ children }) => {
     setCurrentWeek(getWeekNumber(today));
   }, []);
 
-  // Hämta initial data från servern
   useEffect(() => {
-    // Antag att du har en funktion som gör API-anropet
-    fetch("/api/training")
-      .then((response) => response.json())
-      .then((data) => {
-        setTrainedMuscles(data.trainedMuscles);
-        setIsActive(data.isActive);
+    // Lägg till en kontroll här för att endast lägga till muskelgrupper om de inte redan finns
+    // Detta är ett enkelt exempel och kan behöva anpassas efter dina behov
+    addMuscleGroups(muscleGroups)
+      .then((response) => {
+        console.log("Muscle groups added:", response);
       })
-      .catch((error) => console.error("Failed to fetch training data", error));
+      .catch((error) => {
+        console.error("Error adding muscle groups:", error);
+      });
   }, []);
+
+  // Hämta initial data från servern
+  // useEffect(() => {
+  //   // Antag att du har en funktion som gör API-anropet
+  //   fetch("/api/training")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setTrainedMuscles(data.trainedMuscles);
+  //       setIsActive(data.isActive);
+  //     })
+  //     .catch((error) => console.error("Failed to fetch training data", error));
+  // }, []);
 
   // Notera: Vi tar bort useEffect för att spara till localStorage
   // och hanterar istället detta med API-anrop när ändringar görs.
