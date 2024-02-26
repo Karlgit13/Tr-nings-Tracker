@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useMuscle } from "./MuscleContext";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const { isLoggedIn, setIsloggedIn } = useMuscle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +21,8 @@ function LoginPage() {
       const data = await response.json();
       if (response.ok) {
         console.log("Inloggning lyckades", data);
-        // Hantera framgångsrik inloggning här
+        setIsloggedIn(true);
+        navigate("/");
       } else {
         setError(data.message);
       }
@@ -49,8 +54,20 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button type="submit">Logga in</button>
+        <button
+          className="bg-red-500 text-white p-2 rounded text-lg hover:bg-red-700 transition-colors cursor-pointer"
+          type="submit"
+        >
+          Logga in
+        </button>
       </form>
+      <div>
+        <Link to={"/"}>
+          <button className="bg-red-500 text-white p-2 rounded text-lg hover:bg-red-700 transition-colors cursor-pointer">
+            back
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

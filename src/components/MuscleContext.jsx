@@ -14,6 +14,7 @@ const MuscleProvider = ({ children }) => {
   const [currentWeek, setCurrentWeek] = useState(null);
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState({});
+  const [isLoggedIn, setIsloggedIn] = useState(false);
 
   // Static data for muscle groups and images
   const muscleGroups = [
@@ -139,6 +140,8 @@ const MuscleProvider = ({ children }) => {
     findMuscleImage,
     markAsTrained,
     allMusclesTrained,
+    isLoggedIn,
+    setIsloggedIn,
   };
 
   return (
