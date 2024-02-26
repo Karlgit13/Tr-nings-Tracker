@@ -1,6 +1,5 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
-const User = require('./User');
 
 let db;
 
