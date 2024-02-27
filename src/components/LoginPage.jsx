@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useMuscle } from "./MuscleContext";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Header from "./Header";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsloggedIn } = useMuscle();
+  const { setIsloggedIn } = useMuscle();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,40 +34,39 @@ function LoginPage() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        {error && <p>{error}</p>}
-        <label>
-          Email:
+    <div className="LoginPage">
+      <Header />
+      <div className="flex flex-col h-screen justify-center place-items-center">
+        <h1 className="p-2 text-white font-serif">Logga in</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-1 w-4/5 max-w-xs mb-24"
+        >
+          {error && <p>{error}</p>}
           <input
+            className="p-2 rounded"
+            placeholder="E-post"
             type="text"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </label>
-        <label>
-          Lösenord:
           <input
+            className="p-2 rounded"
+            placeholder="Lösenord"
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
-        <button
-          className="bg-red-500 text-white p-2 rounded text-lg hover:bg-red-700 transition-colors cursor-pointer"
-          type="submit"
-        >
-          Logga in
-        </button>
-      </form>
-      <div>
-        <Link to={"/"}>
-          <button className="bg-red-500 text-white p-2 rounded text-lg hover:bg-red-700 transition-colors cursor-pointer">
-            back
+
+          <button className="red-button" type="submit">
+            Logga in
           </button>
-        </Link>
+          <Link to={"/"}>
+            <button className="red-button w-full">Tillbaka</button>
+          </Link>
+        </form>
       </div>
     </div>
   );

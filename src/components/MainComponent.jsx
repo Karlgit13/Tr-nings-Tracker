@@ -11,29 +11,29 @@ const MainComponent = () => {
     <div className="MainComponent">
       <Header />
       <WeeklyTracker />
-      {muscleGroups.map((group) => (
-        <div
-          className="flex flex-col items-center justify-center text-center text-[#edefee] my-4"
-          key={group.name}
-        >
-          <h3 className="font-poppins text-sm font-bold mb-2 shadow-lg">
-            {group.name}
-          </h3>
-          <button
-            className="bg-red-500 text-white p-2 rounded-lg border border-black shadow-md cursor-pointer hover:bg-red-700 transition-colors mx-2 font-poppins font-semibold"
-            onClick={() => handleTraining(group.name)}
-          >
-            Tränad
-          </button>
-          {isActive[group.name] && (
-            <Timer
-              key={Date.now()} // Forces re-mount to reset timer
-              restPeriod={group.restPeriod}
-              muscleName={group.name}
-            />
-          )}
-        </div>
-      ))}
+      <h1 className="mt-8 text-center text-white mb-3">
+        Markera Muskler som tränade
+      </h1>
+      <div className="grid grid-cols-3 place-items-center text-white gap-y-5">
+        {muscleGroups.map((group) => (
+          <div className="MuskelGrupperDiv w-4/5" key={group.name}>
+            <h3 className="text-center">{group.name}</h3>
+            <button
+              className="red-button w-full"
+              onClick={() => handleTraining(group.name)}
+            >
+              Tränad
+            </button>
+            {isActive[group.name] && (
+              <Timer
+                key={Date.now()} // Forces re-mount to reset timer
+                restPeriod={group.restPeriod}
+                muscleName={group.name}
+              />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -97,6 +97,7 @@ const MuscleProvider = ({ children }) => {
       .catch((error) => {
         console.error("Error adding muscle groups:", error);
       });
+    // eslint-disable-next-line
   }, []);
 
   // Hämta initial data från servern

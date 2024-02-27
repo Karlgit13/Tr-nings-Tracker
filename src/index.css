@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* bg-red-500 text-white p-2 rounded text-lg hover:bg-red-700 transition-colors cursor-pointer */
+.red-button {
+  background-color: #ef4444;
+  color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 1.125rem;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  background-color: #a31111;
+}
+
 body,
 html {
   padding: 0;

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Header from "./Header";
+import { Link } from "react-router-dom";
 
 function RegisterPage() {
   const [name, setName] = useState("");
@@ -50,39 +52,49 @@ function RegisterPage() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        {error && <p>{error}</p>}
-        <label>
-          Namn:
+    <div className="RegisterPage">
+      {" "}
+      <Header />
+      <div className="flex flex-col justify-center h-screen place-items-center">
+        <h1 className="p-2 text-white font-serif">Skapa konto</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-1 w-4/5 max-w-xs mb-24"
+        >
+          {error && <p>{error}</p>}
           <input
+            className="p-2 rounded"
+            placeholder="Användarnamn"
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-        </label>
-        <label>
-          Lösenord:
           <input
+            className="p-2 rounded"
+            placeholder="Lösenord"
             type="password"
             minLength="6"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
-        <label>
-          Email:
           <input
+            className="p-2 rounded"
+            placeholder="E-post"
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </label>
-        <button type="submit">Registrera</button>
-      </form>
+          <button type="submit" className="red-button">
+            Registrera
+          </button>
+          <Link to={"/"}>
+            <button className="red-button w-full">Tillbaka</button>
+          </Link>
+        </form>
+      </div>
     </div>
   );
 }
