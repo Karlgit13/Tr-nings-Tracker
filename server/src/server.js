@@ -96,7 +96,13 @@ app.get('/api/userTrainedMuscles/:userId', async (req, res) => {
 
     try {
         const userMuscles = await req.db.collection('userMuscles').findOne({ userId: userId });
-        res.json(userMuscles);
+        if (!userMuscles || !userMuscles.trainedMuscles || userMuscles.trainedMuscles.length === 0) {
+            // Om det inte finns några trainedMuscles, skicka tillbaka ett tydligt svar.
+            res.status(404).send('No trained muscles found for the user.');
+        } else {
+            // Om trainedMuscles finns, skicka tillbaka dem.
+            res.json(userMuscles);
+        }
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Internal Server Error');

@@ -17,17 +17,25 @@ export const updateTrainedMuscle = async (userId, muscleName) => {
 };
 
 export const getUserTrainedMuscles = async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/userTrainedMuscles/${userId}`, {
-        method: 'GET'
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch trained muscles');
+    try {
+        const response = await fetch(`${API_BASE_URL}/userTrainedMuscles/${userId}`, {
+            method: 'GET'
+        });
+        if (response.status === 404) {
+            // Ingen data hittades, hantera det på lämpligt sätt, t.ex. genom att informera användaren
+            return null;
+        }
+        if (!response.ok) {
+            throw new Error('Failed to fetch trained muscles');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Failed to fetch trained muscles', error);
+        throw error;
     }
-    console.log(response);
-    return response.json();
 };
 
-// Example of a function to add muscle groups through the API
+
 export const addMuscleGroups = async (muscleGroups) => {
     try {
         const response = await fetch('/api/muscleGroups', {
@@ -48,26 +56,26 @@ export const addMuscleGroups = async (muscleGroups) => {
 
 
 
-export const activateMuscleGroup = async (groupName) => {
-    const response = await fetch(`${API_BASE_URL}/activateMuscleGroup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ groupName }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to activate muscle group');
-    }
-    return response.json();
-};
+// export const activateMuscleGroup = async (groupName) => {
+//     const response = await fetch(`${API_BASE_URL}/activateMuscleGroup`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ groupName }),
+//     });
+//     if (!response.ok) {
+//         throw new Error('Failed to activate muscle group');
+//     }
+//     return response.json();
+// };
 
-export const resetAllTraining = async () => {
-    const response = await fetch(`${API_BASE_URL}/resetAllTraining`, {
-        method: 'POST',
-    });
-    if (!response.ok) {
-        throw new Error('Failed to reset all training');
-    }
-    return response.json();
-};
+// export const resetAllTraining = async () => {
+//     const response = await fetch(`${API_BASE_URL}/resetAllTraining`, {
+//         method: 'POST',
+//     });
+//     if (!response.ok) {
+//         throw new Error('Failed to reset all training');
+//     }
+//     return response.json();
+// };

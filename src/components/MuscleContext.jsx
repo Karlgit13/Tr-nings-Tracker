@@ -19,7 +19,7 @@ const MuscleProvider = ({ children }) => {
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState([]);
   const [allMusclesTrained, setAllMusclesTrained] = useState({});
-  const [isLoggedIn, setIsloggedIn] = useState(true); // OBS glöm inte ändra till false !!!!!!!!!
+  const [isLoggedIn, setIsloggedIn] = useState(false); // OBS glöm inte ändra till false !!!!!!!!!
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -44,9 +44,25 @@ const MuscleProvider = ({ children }) => {
     { name: "Bröst", src: require("../assets/chest1.png") },
   ];
 
-  const updateMusclesFromDB = (userId) => {
-    getUserTrainedMuscles(userId);
+  const updateMusclesFromDB = async (userId) => {
+    try {
+      const muscleData = await getUserTrainedMuscles(userId);
+      if (muscleData) {
+        setTrainedMuscles(muscleData);
+      } else {
+        // Hantera fallet då det inte finns några trainedMuscles för användaren
+        console.log("No trained muscles data for this user.");
+        // Här kan du t.ex. rensa state eller visa ett meddelande för användaren
+      }
+    } catch (error) {
+      console.error("Failed to update muscles from DB", error);
+      // Hantera fel här, t.ex. genom att visa ett felmeddelande för användaren
+    }
   };
+
+  useEffect(() => {
+    updateMusclesFromDB(userId);
+  }, [userId]);
 
   const fetchUserIdByIdentifier = (identifier) => {
     fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
@@ -168,12 +184,12 @@ const MuscleProvider = ({ children }) => {
 
   // yey
   useEffect(() => {
-    console.log("uhm id???? ", userId);
+    console.log("uhm id ======= ", userId);
   }, [userId]);
 
   useEffect(() => {
     console.log("trainedMuscled ======== ", trainedMuscles);
-  });
+  }, [trainedMuscles, userId]);
 
   // Check if all muscles have been trained
 
