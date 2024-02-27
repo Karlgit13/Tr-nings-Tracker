@@ -1,6 +1,6 @@
 // api.js
 
-const API_BASE_URL = "http://localhost:3000/api"; // Ändra portnummer om det behövs
+const API_BASE_URL = "http://localhost:5000/api"; // Ändra portnummer om det behövs
 
 export const updateTrainedMuscle = async (userId, muscleName) => {
     const response = await fetch(`${API_BASE_URL}/trainedMuscle`, {
