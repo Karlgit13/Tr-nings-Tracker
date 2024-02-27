@@ -4,6 +4,7 @@ require('dotenv').config();
 // Importera moduler för att skapa en webbserver och hantera förfrågningar
 const express = require('express');
 const cors = require('cors');
+const router = express.Router()
 
 // Importera databasmodul för att hantera databasförbindelser
 const { MongoClient } = require('mongodb');
@@ -85,5 +86,19 @@ app.get('/api/getUserId', async (req, res) => {
     } catch (error) {
         console.error('Error fetching user:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+// Route för att hämta en användares tränade muskler
+app.get('/api/userTrainedMuscles/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const userMuscles = await req.db.collection('userMuscles').findOne({ userId: userId });
+        res.json(userMuscles);
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Internal Server Error');
     }
 });

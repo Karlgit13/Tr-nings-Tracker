@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 // api mellanhand till back-end
-import { updateTrainedMuscle, addMuscleGroups } from "./api";
+import {
+  updateTrainedMuscle,
+  getUserTrainedMuscles,
+  addMuscleGroups,
+} from "./api";
 
 // Context creation
 const MuscleContext = createContext();
@@ -13,9 +17,9 @@ const MuscleProvider = ({ children }) => {
   // State declarations
   const [currentWeek, setCurrentWeek] = useState(null);
   const [isActive, setIsActive] = useState({});
-  const [trainedMuscles, setTrainedMuscles] = useState({});
+  const [trainedMuscles, setTrainedMuscles] = useState([]);
   const [allMusclesTrained, setAllMusclesTrained] = useState({});
-  const [isLoggedIn, setIsloggedIn] = useState(false);
+  const [isLoggedIn, setIsloggedIn] = useState(true); // OBS glöm inte ändra till false !!!!!!!!!
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -39,6 +43,10 @@ const MuscleProvider = ({ children }) => {
     { name: "Axlar", src: require("../assets/shoulder2.png") },
     { name: "Bröst", src: require("../assets/chest1.png") },
   ];
+
+  const updateMusclesFromDB = (userId) => {
+    getUserTrainedMuscles(userId);
+  };
 
   const fetchUserIdByIdentifier = (identifier) => {
     fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
@@ -73,25 +81,25 @@ const MuscleProvider = ({ children }) => {
   const findMuscleImage = (muscleName) =>
     muscleImages.find((image) => image.name === muscleName)?.src;
 
-  const checkIfAllMusclesAreTrained = (trainedMuscles) => {
-    const allTrained = Object.values(trainedMuscles).every(
-      (status) => status === true
-    );
-    setAllMusclesTrained(allTrained); // Antag att detta uppdaterar en state variabel som håller koll på om alla muskler har tränats
-  };
+  // const checkIfAllMusclesAreTrained = (trainedMuscles) => {
+  //   const allTrained = Object.values(trainedMuscles).every(
+  //     (status) => status === true
+  //   );
+  //   setAllMusclesTrained(allTrained); // Antag att detta uppdaterar en state variabel som håller koll på om alla muskler har tränats
+  // };
 
   const markAsTrained = (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in för markera");
       return;
     }
-    updateTrainedMuscle(muscleName)
+    const userIdFromState = userId;
+    updateTrainedMuscle(userIdFromState, muscleName)
       .then((response) => {
-        // Antag att response.trainedMuscles är ett objekt där nycklarna är muskelnamn
-        // och värdena indikerar om de är tränade eller inte.
-        setTrainedMuscles(response.trainedMuscles || {});
-        // Efter uppdatering, kontrollera om alla muskler har tränats
-        checkIfAllMusclesAreTrained(response.trainedMuscles);
+        console.log("response ======== ", response);
+        console.log("muscleName ====== ", muscleName);
+        setTrainedMuscles(muscleName);
+        console.log("respone.trainedMuscles ======", response.trainedMuscles);
       })
       .catch((error) => {
         console.log(error);
@@ -158,9 +166,14 @@ const MuscleProvider = ({ children }) => {
     // Exempel: Kontrollera om det är dags för återställning och gör ett API-anrop för att återställa
   }, []);
 
+  // yey
   useEffect(() => {
     console.log("uhm id???? ", userId);
   }, [userId]);
+
+  useEffect(() => {
+    console.log("trainedMuscled ======== ", trainedMuscles);
+  });
 
   // Check if all muscles have been trained
 

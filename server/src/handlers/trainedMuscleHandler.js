@@ -4,6 +4,7 @@ async function trainedMuscleHandler(req, res) {
     // Extraherar userId från förfrågans kropp, inte från en autentiseringsmekanism
     const { userId, muscleName } = req.body;
     const db = req.db; // Se till att din databasanslutning är korrekt initialiserad
+    console.log("request body????? ", req.body);
 
     try {
         // Uppdatera "userMuscles" med användarens tränade muskler baserat på userId
@@ -12,6 +13,7 @@ async function trainedMuscleHandler(req, res) {
             { $addToSet: { trainedMuscles: muscleName } }, // Lägg till muskelnamnet utan att tillåta duplicering
             { upsert: true } // Skapa ett nytt dokument om det inte redan finns ett för den användaren
         );
+        console.log("userId???? ", userId);
 
         // Skicka tillbaka ett framgångsrikt svar
         res.status(200).json({ success: true, message: "Muscle marked as trained", data: result });
