@@ -58,3 +58,24 @@ app.use('/api', muscleGroupRoutes);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+// Inom din serverfil, t.ex., server.js eller en dedikerad routerfil.
+
+app.get('/api/getUserId', async (req, res) => {
+    const email = req.query.email; // Anta att du skickar e-postadressen som en query parameter
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+    }
+
+    try {
+        const user = await db.collection('users').findOne({ email });
+        if (user) {
+            res.json({ userId: user._id });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});

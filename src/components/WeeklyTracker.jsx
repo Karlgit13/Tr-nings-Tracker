@@ -7,6 +7,7 @@ const WeeklyTracker = () => {
     trainedMuscles,
     findMuscleImage,
     markAsTrained,
+    allMusclesTrained,
     currentWeek,
   } = useMuscle();
 
@@ -41,11 +42,11 @@ const WeeklyTracker = () => {
           </div>
         ))}
       </div>
-      {/* {allMusclesTrained && (
+      {allMusclesTrained && (
         <p className="font-poppins mt-[-10px] text-center p-4 font-bold text-shadow text-red-500">
           Bra jobbat! <br /> Alla muskler har tränats denna vecka!
         </p>
-      )} */}
+      )}
     </div>
   );
 };

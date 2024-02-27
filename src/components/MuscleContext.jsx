@@ -14,7 +14,9 @@ const MuscleProvider = ({ children }) => {
   const [currentWeek, setCurrentWeek] = useState(null);
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState({});
+  const [allMusclesTrained, setAllMusclesTrained] = useState({});
   const [isLoggedIn, setIsloggedIn] = useState(false);
+  const [userId, setUserId] = useState("");
 
   // Static data for muscle groups and images
   const muscleGroups = [
@@ -37,7 +39,23 @@ const MuscleProvider = ({ children }) => {
     { name: "Bröst", src: require("../assets/chest1.png") },
   ];
 
-  // Utility functions
+  const fetchUserIdByEmail = (email) => {
+    fetch(`http://localhost:5000/api/getUserId?email=${email}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch user ID");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setUserId(data.userId);
+        console.log(data.userId);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const getWeekNumber = (date) => {
     const newDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -50,14 +68,29 @@ const MuscleProvider = ({ children }) => {
   const findMuscleImage = (muscleName) =>
     muscleImages.find((image) => image.name === muscleName)?.src;
 
+  const checkIfAllMusclesAreTrained = (trainedMuscles) => {
+    const allTrained = Object.values(trainedMuscles).every(
+      (status) => status === true
+    );
+    setAllMusclesTrained(allTrained); // Antag att detta uppdaterar en state variabel som håller koll på om alla muskler har tränats
+  };
+
   const markAsTrained = (muscleName) => {
+    if (!isLoggedIn) {
+      alert("Du måste logga in för markera");
+      return;
+    }
     updateTrainedMuscle(muscleName)
       .then((response) => {
-        setTrainedMuscles(response.trainedMuscles);
+        // Antag att response.trainedMuscles är ett objekt där nycklarna är muskelnamn
+        // och värdena indikerar om de är tränade eller inte.
+        setTrainedMuscles(response.trainedMuscles || {});
+        // Efter uppdatering, kontrollera om alla muskler har tränats
+        checkIfAllMusclesAreTrained(response.trainedMuscles);
       })
       .catch((error) => {
         console.log(error);
-        console.error("failed to mark muscle as trained", error);
+        console.error("fail", error);
       });
   };
 
@@ -121,9 +154,6 @@ const MuscleProvider = ({ children }) => {
   }, []);
 
   // Check if all muscles have been trained
-  const allMusclesTrained = Object.values(trainedMuscles).every(
-    (status) => status
-  );
 
   // Context provider value
   const value = {
@@ -143,6 +173,9 @@ const MuscleProvider = ({ children }) => {
     allMusclesTrained,
     isLoggedIn,
     setIsloggedIn,
+    fetchUserIdByEmail,
+    userId,
+    setUserId,
   };
 
   return (

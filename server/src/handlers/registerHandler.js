@@ -1,3 +1,4 @@
+// registerHandler.js
 // Importera MongoDB-klient för att kommunicera med din databas och bcryptjs för lösenordshashning
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
@@ -52,6 +53,8 @@ module.exports = async (req, res) => {
         console.log('Saving new user');
         const result = await db.collection('users').insertOne(newUser);
         console.log('User saved', result.insertedId);
+
+        const userId = result.insertedId;
 
         // Skicka tillbaka ett framgångsrikt svar med användar-ID:t
         res.status(201).json({ message: 'User created successfully', userId: result.insertedId });

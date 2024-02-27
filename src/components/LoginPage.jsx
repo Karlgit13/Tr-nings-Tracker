@@ -5,8 +5,8 @@ import Header from "./Header";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setIsloggedIn } = useMuscle();
-  const [email, setEmail] = useState("");
+  const { setIsloggedIn, fetchUserIdByEmail, userId, setUserId } = useMuscle();
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -17,12 +17,13 @@ function LoginPage() {
         // Uppdaterad till serverlös funktion på Vercel
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
       const data = await response.json();
       if (response.ok) {
         console.log("Inloggning lyckades", data);
         setIsloggedIn(true);
+        fetchUserIdByEmail()
         navigate("/");
       } else {
         setError(data.message);
@@ -45,11 +46,11 @@ function LoginPage() {
           {error && <p>{error}</p>}
           <input
             className="p-2 rounded"
-            placeholder="E-post"
+            placeholder="Användarnamn eller E-post"
             type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
           />
           <input
             className="p-2 rounded"

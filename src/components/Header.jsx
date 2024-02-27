@@ -34,12 +34,10 @@ const Header = () => {
             {isClicked && (
               <div className="flex flex-col absolute p-8 bg-[#01112b] z-10 right-0 gap-1 -mr-5 rounded w-[200px] md:w-[350px]">
                 <>
-                  <button
-                    onClick={() => setIsloggedIn(false)}
-                    className="red-button w-full"
-                  >
-                    Logga ut
-                  </button>
+                  <Link to={"/data"}>
+                    <button className="red-button w-full">Min Data</button>
+                  </Link>
+
                   <button
                     onClick={() => {
                       resetTraining();
@@ -49,9 +47,12 @@ const Header = () => {
                   >
                     Återställ
                   </button>
-                  <Link to={"/data"}>
-                    <button className="red-button w-full">Min Data</button>
-                  </Link>
+                  <button
+                    onClick={() => setIsloggedIn(false)}
+                    className="red-button w-full"
+                  >
+                    Logga ut
+                  </button>
                 </>
               </div>
             )}
