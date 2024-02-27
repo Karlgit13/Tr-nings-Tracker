@@ -18,6 +18,7 @@ const MuscleProvider = ({ children }) => {
   const [currentWeek, setCurrentWeek] = useState(null);
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState([]);
+  // eslint-disable-next-line
   const [allMusclesTrained, setAllMusclesTrained] = useState({});
   const [isLoggedIn, setIsloggedIn] = useState(false); // OBS glöm inte ändra till false !!!!!!!!!
   const [identifier, setIdentifier] = useState("");
