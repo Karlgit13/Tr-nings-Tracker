@@ -15,7 +15,6 @@ function LoginPage() {
     e.preventDefault();
     try {
       const response = await fetch("/api/login", {
-        // Uppdaterad till serverlös funktion på Vercel
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
