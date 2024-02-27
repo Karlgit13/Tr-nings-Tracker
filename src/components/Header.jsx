@@ -5,7 +5,8 @@ import { useMuscle } from "./MuscleContext";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { refreshPage, resetTraining, isLoggedIn, setIsloggedIn } = useMuscle();
+  const { refreshPage, resetTraining, isLoggedIn, setIsloggedIn, setUserId } =
+    useMuscle();
   const [isClicked, setIsClicked] = useState();
 
   const toggleBurgare = () => {
@@ -48,7 +49,10 @@ const Header = () => {
                     Återställ
                   </button>
                   <button
-                    onClick={() => setIsloggedIn(false)}
+                    onClick={() => {
+                      setIsloggedIn(false);
+                      setUserId("");
+                    }}
                     className="red-button w-full"
                   >
                     Logga ut

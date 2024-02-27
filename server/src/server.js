@@ -62,13 +62,21 @@ app.listen(PORT, () => {
 // Inom din serverfil, t.ex., server.js eller en dedikerad routerfil.
 
 app.get('/api/getUserId', async (req, res) => {
-    const email = req.query.email; // Anta att du skickar e-postadressen som en query parameter
-    if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
+    const identifier = req.query.identifier; // Ta emot identifier som en query parameter
+    if (!identifier) {
+        return res.status(400).json({ error: 'Identifier is required' });
     }
 
     try {
-        const user = await db.collection('users').findOne({ email });
+        // Anta att användaren kan identifieras antingen via email eller användarnamn
+        // Använd $or för att söka efter dokument där antingen email eller username matchar identifier
+        const user = await db.collection('users').findOne({
+            $or: [
+                { email: identifier },
+                { name: identifier }
+            ]
+        });
+
         if (user) {
             res.json({ userId: user._id });
         } else {

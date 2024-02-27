@@ -5,8 +5,9 @@ import Header from "./Header";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setIsloggedIn, fetchUserIdByEmail, userId, setUserId } = useMuscle();
-  const [identifier, setIdentifier] = useState("");
+  const { setIsloggedIn, identifier, setIdentifier, fetchUserIdByIdentifier } =
+    useMuscle();
+
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -23,7 +24,7 @@ function LoginPage() {
       if (response.ok) {
         console.log("Inloggning lyckades", data);
         setIsloggedIn(true);
-        fetchUserIdByEmail()
+        fetchUserIdByIdentifier(identifier);
         navigate("/");
       } else {
         setError(data.message);

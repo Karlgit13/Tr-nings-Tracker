@@ -17,10 +17,9 @@ const WeeklyTracker = () => {
         Vecka <span className="text-red-500">{currentWeek}</span> träning
       </h2>
       <div className="flex flex-row justify-center flex-wrap p-4">
-        {muscleGroups.map((group) => (
-          <div>
+        {muscleGroups.map((group, index) => (
+          <div key={index}>
             <button
-              key={group.name}
               className={`font-poppins text-[#edefee]  m-[1vw] flex-1 text-center bg-transparent border-none cursor-pointer relative text-shadow  ${
                 trainedMuscles[group.name] ? "opacity-50" : ""
               }`}

@@ -16,6 +16,7 @@ const MuscleProvider = ({ children }) => {
   const [trainedMuscles, setTrainedMuscles] = useState({});
   const [allMusclesTrained, setAllMusclesTrained] = useState({});
   const [isLoggedIn, setIsloggedIn] = useState(false);
+  const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
 
   // Static data for muscle groups and images
@@ -39,17 +40,21 @@ const MuscleProvider = ({ children }) => {
     { name: "Bröst", src: require("../assets/chest1.png") },
   ];
 
-  const fetchUserIdByEmail = (email) => {
-    fetch(`http://localhost:5000/api/getUserId?email=${email}`)
+  const fetchUserIdByIdentifier = (identifier) => {
+    fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
       .then((response) => {
+        console.log("SVAR HÄR: ", response);
         if (!response.ok) {
           throw new Error("Failed to fetch user ID");
         }
         return response.json();
       })
       .then((data) => {
-        setUserId(data.userId);
-        console.log(data.userId);
+        console.log("DATA HÄR", data);
+        const userIdFromDB = data.userId;
+        setUserId(userIdFromDB);
+        console.log("DATA USERI: ", data.userId);
+        console.log("USERI: ", userId);
       })
       .catch((error) => {
         console.error(error);
@@ -153,6 +158,10 @@ const MuscleProvider = ({ children }) => {
     // Exempel: Kontrollera om det är dags för återställning och gör ett API-anrop för att återställa
   }, []);
 
+  useEffect(() => {
+    console.log("uhm id???? ", userId);
+  }, [userId]);
+
   // Check if all muscles have been trained
 
   // Context provider value
@@ -173,9 +182,11 @@ const MuscleProvider = ({ children }) => {
     allMusclesTrained,
     isLoggedIn,
     setIsloggedIn,
-    fetchUserIdByEmail,
+    identifier,
+    setIdentifier,
     userId,
     setUserId,
+    fetchUserIdByIdentifier,
   };
 
   return (
