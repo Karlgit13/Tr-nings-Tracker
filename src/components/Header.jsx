@@ -3,14 +3,30 @@ import Burgare from "../assets/icons8-menu-50.png";
 import Logo from "../assets/nylogo.webp";
 import { useMuscle } from "./MuscleContext";
 import { Link } from "react-router-dom";
+import { resetUserMuscles } from "./api";
 
 const Header = () => {
-  const { refreshPage, resetTraining, isLoggedIn, setIsloggedIn, setUserId } =
-    useMuscle();
+  const {
+    refreshPage,
+    resetTraining,
+    isLoggedIn,
+    setIsloggedIn,
+    userId,
+    setUserId,
+  } = useMuscle();
   const [isClicked, setIsClicked] = useState();
 
   const toggleBurgare = () => {
     setIsClicked(!isClicked);
+  };
+
+  const handleResetClick = async () => {
+    try {
+      await resetUserMuscles(userId); // Use userId directly here
+      console.log("muscles reset success");
+    } catch (error) {
+      console.error("fail", error);
+    }
   };
 
   return (
@@ -39,13 +55,7 @@ const Header = () => {
                     <button className="red-button w-full">Min Data</button>
                   </Link>
 
-                  <button
-                    onClick={() => {
-                      resetTraining();
-                      refreshPage();
-                    }}
-                    className="red-button"
-                  >
+                  <button onClick={handleResetClick} className="red-button">
                     Återställ
                   </button>
                   <button
