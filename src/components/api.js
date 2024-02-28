@@ -1,6 +1,29 @@
 // API configuration
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
-// test
+
+
+
+
+// Function to reset trained muscles for a user
+export const resetUserMuscles = async (userId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/resetUserMuscles`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }), // Include userId in the request body
+        });
+        if (!response.ok) {
+            throw new Error('Failed to reset user muscles');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Failed to reset user muscles', error);
+        throw error;
+    }
+};
+
 // Function todsa update a trained muscle for a user
 export const updateTrainedMuscle = async (userId, muscleName) => {
     const response = await fetch(`${API_BASE_URL}/trainedMuscle`, {
