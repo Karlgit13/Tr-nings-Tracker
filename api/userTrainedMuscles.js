@@ -1,3 +1,4 @@
+// userTrainedMuscles.js
 const { MongoClient } = require('mongodb');
 
 module.exports = async (req, res) => {

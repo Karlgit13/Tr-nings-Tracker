@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = "http://localhost:5000/api"; // Change port number if needed
+const API_BASE_URL = "https://workout-tau-cyan.vercel.app/"; // Change port number if needed
 
 // Function to update a trained muscle for a user
 export const updateTrainedMuscle = async (userId, muscleName) => {
