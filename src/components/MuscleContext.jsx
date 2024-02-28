@@ -5,6 +5,8 @@ import {
   addMuscleGroups,
 } from "./api";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 // Context creation
 const MuscleContext = createContext();
 
@@ -70,7 +72,7 @@ const MuscleProvider = ({ children }) => {
   };
 
   const fetchUserIdByIdentifier = (identifier) => {
-    fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
+    fetch(`${API_BASE_URL}/getUserId?identifier=${identifier}`)
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("userId", data.userId);
