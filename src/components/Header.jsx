@@ -50,8 +50,10 @@ const Header = () => {
                   </button>
                   <button
                     onClick={() => {
+                      localStorage.removeItem("isLoggedIn");
+                      localStorage.removeItem("userId");
                       setIsloggedIn(false);
-                      setUserId("");
+                      setUserId(null);
                     }}
                     className="red-button w-full"
                   >

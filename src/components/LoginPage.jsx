@@ -5,8 +5,15 @@ import Header from "./Header";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setIsloggedIn, identifier, setIdentifier, fetchUserIdByIdentifier } =
-    useMuscle();
+  const {
+    setIsloggedIn,
+    identifier,
+    setIdentifier,
+    fetchUserIdByIdentifier,
+    saveUserIdToLocalStorage,
+    userId,
+    setUserId,
+  } = useMuscle();
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,6 +28,7 @@ function LoginPage() {
       });
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem("isLoggedIn", true);
         console.log("Inloggning lyckades", data);
         setIsloggedIn(true);
         fetchUserIdByIdentifier(identifier);

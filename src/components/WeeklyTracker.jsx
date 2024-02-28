@@ -21,7 +21,7 @@ const WeeklyTracker = () => {
           <div key={index}>
             <button
               className={`font-poppins text-[#edefee]  m-[1vw] flex-1 text-center bg-transparent border-none cursor-pointer relative text-shadow  ${
-                trainedMuscles[group.name] ? "opacity-50" : ""
+                trainedMuscles.includes(group.name) ? "opacity-50" : ""
               }`}
               onClick={() => markAsTrained(group.name)}
               style={{ minWidth: "100px" }}
@@ -31,7 +31,7 @@ const WeeklyTracker = () => {
                 src={findMuscleImage(group.name)}
                 alt={group.name}
               />
-              {trainedMuscles[group.name] && (
+              {trainedMuscles.includes(group.name) && (
                 <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-green-700">
                   &#10004;
                 </span>

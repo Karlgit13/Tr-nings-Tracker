@@ -19,7 +19,7 @@ const MuscleProvider = ({ children }) => {
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState([]);
   // eslint-disable-next-line
-  const [allMusclesTrained, setAllMusclesTrained] = useState({});
+  const [allMusclesTrained, setAllMusclesTrained] = useState(false);
   const [isLoggedIn, setIsloggedIn] = useState(false); // OBS glöm inte ändra till false !!!!!!!!!
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
@@ -48,8 +48,10 @@ const MuscleProvider = ({ children }) => {
   const updateMusclesFromDB = async (userId) => {
     try {
       const muscleData = await getUserTrainedMuscles(userId);
-      if (muscleData) {
-        setTrainedMuscles(muscleData);
+      if (muscleData && muscleData.trainedMuscles) {
+        console.log("muscleDAta ======== ", muscleData);
+        console.log("trainedMusclesState ====== ", trainedMuscles);
+        setTrainedMuscles(muscleData.trainedMuscles);
       } else {
         // Hantera fallet då det inte finns några trainedMuscles för användaren
         console.log("No trained muscles data for this user.");
@@ -60,10 +62,6 @@ const MuscleProvider = ({ children }) => {
       // Hantera fel här, t.ex. genom att visa ett felmeddelande för användaren
     }
   };
-
-  useEffect(() => {
-    updateMusclesFromDB(userId);
-  }, [userId]);
 
   const fetchUserIdByIdentifier = (identifier) => {
     fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
@@ -76,8 +74,8 @@ const MuscleProvider = ({ children }) => {
       })
       .then((data) => {
         console.log("DATA HÄR", data);
-        const userIdFromDB = data.userId;
-        setUserId(userIdFromDB);
+        localStorage.setItem("userId", data.userId);
+        setUserId(data.userId);
         console.log("DATA USERI: ", data.userId);
         console.log("USERI: ", userId);
       })
@@ -85,6 +83,20 @@ const MuscleProvider = ({ children }) => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId); // Ställer in userId baserat på värdet i localStorage
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      updateMusclesFromDB(userId);
+    }
+    // eslint-disable-next-line
+  }, [userId]);
 
   const getWeekNumber = (date) => {
     const newDate = new Date(
@@ -115,8 +127,11 @@ const MuscleProvider = ({ children }) => {
       .then((response) => {
         console.log("response ======== ", response);
         console.log("muscleName ====== ", muscleName);
-        setTrainedMuscles(muscleName);
-        console.log("respone.trainedMuscles ======", response.trainedMuscles);
+        setTrainedMuscles((prevState) => ({
+          ...prevState,
+          [muscleName]: true,
+        }));
+        console.log("respone.trainedMuscles ======", muscleName);
       })
       .catch((error) => {
         console.log(error);
@@ -192,6 +207,11 @@ const MuscleProvider = ({ children }) => {
     console.log("trainedMuscled ======== ", trainedMuscles);
   }, [trainedMuscles, userId]);
 
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsloggedIn(isLoggedIn);
+  }, []);
+
   // Check if all muscles have been trained
 
   // Context provider value
@@ -217,6 +237,7 @@ const MuscleProvider = ({ children }) => {
     userId,
     setUserId,
     fetchUserIdByIdentifier,
+    updateMusclesFromDB,
   };
 
   return (
