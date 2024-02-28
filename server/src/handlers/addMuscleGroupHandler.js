@@ -1,6 +1,23 @@
 // addMuscleGroupHandler.js
 
+// Importera MongoDB-klient för att kommunicera med din databas och bcryptjs för lösenordshashning
+const { MongoClient } = require('mongodb');
+
+
+// Skapa en variabel för att lagra din databasanslutning, så att vi inte ansluter flera gånger
+let db;
+
+// Funktion för att ansluta till MongoDB
+const connectToDatabase = async () => {
+    // Om vi redan har en databasanslutning, använd den och returnera tidigt
+    if (db) return;
+    // Annars skapa en ny anslutning med hjälp av URI:n från miljövariablerna
+    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    db = client.db(); // Spara databasanslutningen i 'db' variabeln
+};
+
 async function addMuscleGroupHandler(req, res) {
+    await connectToDatabase();
     const muscleGroups = req.body.muscleGroups; // Antag att vi får en array av muskelgrupper
 
     try {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const resetUserMusclesHandler = require('./resetUserMusclesHandler');
+const resetUserMusclesHandler = require('../handlers/resetUserMusclesHandler');
 
 router.post('/', resetUserMusclesHandler);
 
