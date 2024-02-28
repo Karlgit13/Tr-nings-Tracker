@@ -1,6 +1,6 @@
 // API configuration
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
-
+// test
 // Function to update a trained muscle for a user
 export const updateTrainedMuscle = async (userId, muscleName) => {
     const response = await fetch(`${API_BASE_URL}/trainedMuscle`, {
