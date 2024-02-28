@@ -11,9 +11,9 @@ const connectToDatabase = async () => {
     if (db) return;
 
     // Anslut till databasen med hjälp av MongoClient
-    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
 
-    // Spara databasreferensen i variabeln db
+    // Spara databasreferensen i variabeleln dbdb
     db = client.db();
 };
 
@@ -22,15 +22,15 @@ async function addMuscleGroupHandler(req, res) {
     // Anslut till databasen
     await connectToDatabase();
 
-    const muscleGroups = req.body.muscleGroups; // Antag att vi får en array av muskelgrupper
+    const muscleGroups = req.body.muscleGroups; //  får ent vi fåav m array upperskelgrupper
 
     try {
-        // Skapa en operation för att kontrollera varje muskelgrupp och bara lägga till de som inte finns
+        // Skapa e operation ntrollera varje attkelgrupp och bara  musa till de som inte finnstill de som inte finns
         const addOperations = muscleGroups.map(group => ({
             updateOne: {
                 filter: { name: group.name },
                 update: { $setOnInsert: group },
-                upsert: true // Om inget dokument matchar filteret, lägg till det nya dokumentet
+                upsert: true // nget doeument matchl det nyar filtereett, lägg till det nya dokumentet
             }
         }));
 
