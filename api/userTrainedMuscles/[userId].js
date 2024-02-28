@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
         const userMuscles = await db.collection('userMuscles').findOne({ userId });
 
         if (!userMuscles) {
-            return res.status(404).json({ error: 'No trained muscles found for the user' });
+            return res.status(200).json({ message: 'inget att hämta, gå till gymmet' });
         }
         return res.status(200).json(userMuscles);
     } catch (error) {
