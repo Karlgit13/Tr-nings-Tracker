@@ -7,8 +7,8 @@ let db = null;
 // Function to connect to the database
 async function connectToDatabase() {
     if (db) return db; // Return existing connection if it's already established
-    const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    db = client.db(process.env.DB_NAME);
+    const client = await MongoClient.connect(uri);
+    db = client.db();
     return db;
 }
 
