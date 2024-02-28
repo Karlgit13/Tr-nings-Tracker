@@ -1,83 +1,66 @@
-// Laddar konfigurationer från .env-filen in i process.env
+// ********** Environment Configurations **********
 require('dotenv').config();
 
-// Importera moduler för att skapa en webbserver och hantera förfrågningar
+// ********** Module Imports **********
 const express = require('express');
 const cors = require('cors');
-const router = express.Router()
-
-// Importera databasmodul för att hantera databasförbindelser
 const { MongoClient } = require('mongodb');
 
-// Importera rutt-hanterare för olika endpoints
+// ********** Route Handlers Imports **********
 const registerHandler = require('./handlers/registerHandler');
 const loginHandler = require('./handlers/loginHandler');
-const trainedMuscleHandler = require("./handlers/trainedMuscleHandler")
+const trainedMuscleHandler = require("./handlers/trainedMuscleHandler");
+
+// ********** Routes Imports **********
 const trainedMuscleRoutes = require('./routes/trainedMuscleRoutes');
 const loginRoutes = require("./routes/loginRoutes");
 const userRoutes = require("./routes/userRoutes");
 const muscleGroupRoutes = require('./routes/muscleGroupRoutes');
 
-// Skapa en instans av express-appen och definiera port
+// ********** Express App Setup **********
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Global databasanslutningsvariabel
-let db;
+// ********** Middleware Setup **********
+app.use(express.json()); // Parse JSON-payload från inkommande förfrågningar
+app.use(cors()); // Allow CORS for all domains
 
-// Funktion för att etablera en databasanslutning
+// ********** Database Connection **********
+let db;
 const connectToDatabase = async () => {
-    if (db) return db; // Returnera existerande förbindelse om en finns
+    if (db) return db; // Return existing connection if it exists
     const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     db = client.db();
     return db;
 };
 
-// Middleware för att hantera JSON-data och CORS
-app.use(express.json()); // Parse JSON-payload från inkommande förfrågningar
-app.use(cors()); // Tillåt CORS för alla domäner
-
-// Middleware för att sätta upp databasanslutning i förfrågningsobjektet
+// Set up database connection in request object
 app.use(async (req, res, next) => {
     req.db = await connectToDatabase();
     next();
 });
 
-// Rutt-hanterare för användarregistrering och inloggning
+// ********** Route Handlers Setup **********
 app.post('/api/register', registerHandler);
 app.post('/api/login', loginHandler);
-app.post('/api/trainedMuscle', trainedMuscleHandler)
+app.post('/api/trainedMuscle', trainedMuscleHandler);
 
-
-// Rutt-moduler för inloggnings- och användarrelaterade endpoints
+// ********** Routes Setup **********
 app.use(loginRoutes);
 app.use(userRoutes);
-app.use("/api", trainedMuscleRoutes)
+app.use("/api", trainedMuscleRoutes);
 app.use('/api', muscleGroupRoutes);
 
-// Starta servern och lyssna på definierad port
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
-
-// Inom din serverfil, t.ex., server.js eller en dedikerad routerfil.
-
+// ********** Custom Routes **********
+// Route to fetch user ID by identifier
 app.get('/api/getUserId', async (req, res) => {
-    const identifier = req.query.identifier; // Ta emot identifier som en query parameter
+    const identifier = req.query.identifier;
     if (!identifier) {
         return res.status(400).json({ error: 'Identifier is required' });
     }
 
     try {
-        // Anta att användaren kan identifieras antingen via email eller användarnamn
-        // Använd $or för att söka efter dokument där antingen email eller username matchar identifier
-        const user = await db.collection('users').findOne({
-            $or: [
-                { email: identifier },
-                { name: identifier }
-            ]
-        });
-
+        const user = await db.collection('users').findOne({ $or: [{ email: identifier }, { name: identifier }] });
         if (user) {
             res.json({ userId: user._id });
         } else {
@@ -89,22 +72,24 @@ app.get('/api/getUserId', async (req, res) => {
     }
 });
 
-
-// Route för att hämta en användares tränade muskler
+// Route to fetch a user's trained muscles by user ID
 app.get('/api/userTrainedMuscles/:userId', async (req, res) => {
     const userId = req.params.userId;
 
     try {
         const userMuscles = await req.db.collection('userMuscles').findOne({ userId: userId });
         if (!userMuscles || !userMuscles.trainedMuscles || userMuscles.trainedMuscles.length === 0) {
-            // Om det inte finns några trainedMuscles, skicka tillbaka ett tydligt svar.
             res.status(404).send('No trained muscles found for the user.');
         } else {
-            // Om trainedMuscles finns, skicka tillbaka dem.
             res.json(userMuscles);
         }
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+// ********** Start Server **********
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

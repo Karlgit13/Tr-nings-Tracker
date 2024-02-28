@@ -5,15 +5,8 @@ import Header from "./Header";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const {
-    setIsloggedIn,
-    identifier,
-    setIdentifier,
-    fetchUserIdByIdentifier,
-    saveUserIdToLocalStorage,
-    userId,
-    setUserId,
-  } = useMuscle();
+  const { setIsloggedIn, identifier, setIdentifier, fetchUserIdByIdentifier } =
+    useMuscle();
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

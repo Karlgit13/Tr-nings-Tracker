@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-// api mellanhand till back-end
 import {
   updateTrainedMuscle,
   getUserTrainedMuscles,
@@ -14,17 +13,16 @@ export const useMuscle = () => useContext(MuscleContext);
 
 // Context provider component
 const MuscleProvider = ({ children }) => {
-  // State declarations
+  // ********** State Declarations **********
   const [currentWeek, setCurrentWeek] = useState(null);
   const [isActive, setIsActive] = useState({});
   const [trainedMuscles, setTrainedMuscles] = useState([]);
-  // eslint-disable-next-line
   const [allMusclesTrained, setAllMusclesTrained] = useState(false);
-  const [isLoggedIn, setIsloggedIn] = useState(false); // OBS glöm inte ändra till false !!!!!!!!!
+  const [isLoggedIn, setIsloggedIn] = useState(false);
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
 
-  // Static data for muscle groups and images
+  // ********** Static Data **********
   const muscleGroups = [
     { name: "Bröst", restPeriod: 48 },
     { name: "Rygg", restPeriod: 48 },
@@ -45,59 +43,7 @@ const MuscleProvider = ({ children }) => {
     { name: "Bröst", src: require("../assets/chest1.png") },
   ];
 
-  const updateMusclesFromDB = async (userId) => {
-    try {
-      const muscleData = await getUserTrainedMuscles(userId);
-      if (muscleData && muscleData.trainedMuscles) {
-        console.log("muscleDAta ======== ", muscleData);
-        console.log("trainedMusclesState ====== ", trainedMuscles);
-        setTrainedMuscles(muscleData.trainedMuscles);
-      } else {
-        // Hantera fallet då det inte finns några trainedMuscles för användaren
-        console.log("No trained muscles data for this user.");
-        // Här kan du t.ex. rensa state eller visa ett meddelande för användaren
-      }
-    } catch (error) {
-      console.error("Failed to update muscles from DB", error);
-      // Hantera fel här, t.ex. genom att visa ett felmeddelande för användaren
-    }
-  };
-
-  const fetchUserIdByIdentifier = (identifier) => {
-    fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
-      .then((response) => {
-        console.log("SVAR HÄR: ", response);
-        if (!response.ok) {
-          throw new Error("Failed to fetch user ID");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("DATA HÄR", data);
-        localStorage.setItem("userId", data.userId);
-        setUserId(data.userId);
-        console.log("DATA USERI: ", data.userId);
-        console.log("USERI: ", userId);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setUserId(storedUserId); // Ställer in userId baserat på värdet i localStorage
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
-      updateMusclesFromDB(userId);
-    }
-    // eslint-disable-next-line
-  }, [userId]);
-
+  // ********** Functions **********
   const getWeekNumber = (date) => {
     const newDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -110,86 +56,68 @@ const MuscleProvider = ({ children }) => {
   const findMuscleImage = (muscleName) =>
     muscleImages.find((image) => image.name === muscleName)?.src;
 
+  const updateMusclesFromDB = async (userId) => {
+    try {
+      const muscleData = await getUserTrainedMuscles(userId);
+      if (muscleData && muscleData.trainedMuscles) {
+        setTrainedMuscles(muscleData.trainedMuscles);
+      } else {
+        console.log("No trained muscles data for this user.");
+      }
+    } catch (error) {
+      console.error("Failed to update muscles from DB", error);
+    }
+  };
+
+  const fetchUserIdByIdentifier = (identifier) => {
+    fetch(`http://localhost:5000/api/getUserId?identifier=${identifier}`)
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("userId", data.userId);
+        setUserId(data.userId);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const markAsTrained = (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in för markera");
       return;
     }
-    const userIdFromState = userId;
-    updateTrainedMuscle(userIdFromState, muscleName)
-      .then((response) => {
-        console.log("response ======== ", response);
-        console.log("muscleName ====== ", muscleName);
-        setTrainedMuscles((prevState) => {
-          if (!prevState.includes(muscleName)) {
-            return [...prevState, muscleName];
-          }
-          return prevState;
-        });
-        console.log("respone.trainedMuscles ======", muscleName);
+    updateTrainedMuscle(userId, muscleName)
+      .then(() => {
+        setTrainedMuscles((prevState) => [...prevState, muscleName]);
       })
       .catch((error) => {
-        console.log(error);
         console.error("fail", error);
       });
   };
 
-  const handleTraining = (groupName) => {
-    // Liknande markAsTrained, detta skulle trigga ett API-anrop för att uppdatera vilka muskelgrupper som är aktiva
-    // Exempel:
-    // api.activateMuscleGroup(groupName).then(updatedIsActive => {
-    //   setIsActive(updatedIsActive);
-    // });
-  };
-
-  const refreshPage = () => {
-    // Denna funktion kan behöva anpassas eller tas bort beroende på hur du hanterar siduppdateringar med serverdata
-  };
-
-  const resetTraining = () => {
-    // Skicka ett anrop till servern för att återställa träningsstatus för alla muskelgrupper
-    // api.resetAllTraining().then(() => {
-    //   setTrainedMuscles({});
-    //   setIsActive({});
-    // });
-  };
-
-  // Effects
+  // ********** Effects **********
   useEffect(() => {
-    const today = new Date();
-    setCurrentWeek(getWeekNumber(today));
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsloggedIn(isLoggedIn);
   }, []);
 
   useEffect(() => {
-    // Lägg till en kontroll här för att endast lägga till muskelgrupper om de inte redan finns
-    // Detta är ett enkelt exempel och kan behöva anpassas efter dina behov
-    addMuscleGroups(muscleGroups)
-      .then((response) => {
-        console.log("Muscle groups added:", response);
-      })
-      .catch((error) => {
-        console.error("Error adding muscle groups:", error);
-      });
-    // eslint-disable-next-line
-  }, []);
-
-  // Denna logik kan behöva anpassas beroende på hur du hanterar återställningen server-sidan
-  useEffect(() => {
-    // Exempel: Kontrollera om det är dags för återställning och gör ett API-anrop för att återställa
-  }, []);
-
-  // yey
-  useEffect(() => {
-    console.log("uhm id ======= ", userId);
+    if (userId) {
+      updateMusclesFromDB(userId);
+    }
   }, [userId]);
 
   useEffect(() => {
-    console.log("trainedMuscled ======== ", trainedMuscles);
-  }, [trainedMuscles, userId]);
-
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    setIsloggedIn(isLoggedIn);
+    const today = new Date();
+    setCurrentWeek(getWeekNumber(today));
+    addMuscleGroups(muscleGroups)
+      .then((response) => console.log("Muscle groups added:", response))
+      .catch((error) => console.error("Error adding muscle groups:", error));
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -200,18 +128,13 @@ const MuscleProvider = ({ children }) => {
     }
   }, [trainedMuscles]);
 
-  // Check if all muscles have been trained
-
-  // Context provider value
+  // ********** Context provider value **********
   const value = {
     muscleGroups,
     currentWeek,
     getWeekNumber,
-    refreshPage,
     trainedMuscles,
     setTrainedMuscles,
-    handleTraining,
-    resetTraining,
     isActive,
     setIsActive,
     muscleImages,
