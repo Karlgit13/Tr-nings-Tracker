@@ -16,6 +16,10 @@ const trainedMuscleRoutes = require('./routes/trainedMuscleRoutes');
 const loginRoutes = require("./routes/loginRoutes");
 const userRoutes = require("./routes/userRoutes");
 const muscleGroupRoutes = require('./routes/muscleGroupRoutes');
+const resetUserMusclesRoute = require('./routes/resetUserMusclesRoute');
+const getUserIdRoute = require('./routes/getUserIdRoute');
+const userTrainedMusclesRoute = require('./routes/userTrainedMusclesRoute');
+
 
 // ********** Express App Setup **********
 const app = express();
@@ -50,44 +54,11 @@ app.use(loginRoutes);
 app.use(userRoutes);
 app.use("/api", trainedMuscleRoutes);
 app.use('/api', muscleGroupRoutes);
+app.use('/api/resetUserMuscles', resetUserMusclesRoute);
+app.use('/api/getUserId', getUserIdRoute);
+app.use('/api/userTrainedMuscles', userTrainedMusclesRoute);
 
-// ********** Custom Routes **********
-// Route to fetch user ID by identifier
-app.get('/api/getUserId', async (req, res) => {
-    const identifier = req.query.identifier;
-    if (!identifier) {
-        return res.status(400).json({ error: 'Identifier is required' });
-    }
 
-    try {
-        const user = await db.collection('users').findOne({ $or: [{ email: identifier }, { name: identifier }] });
-        if (user) {
-            res.json({ userId: user._id });
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (error) {
-        console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Route to fetch a user's trained muscles by user ID
-app.get('/api/userTrainedMuscles/:userId', async (req, res) => {
-    const userId = req.params.userId;
-
-    try {
-        const userMuscles = await req.db.collection('userMuscles').findOne({ userId: userId });
-        if (!userMuscles || !userMuscles.trainedMuscles || userMuscles.trainedMuscles.length === 0) {
-            res.status(404).send('No trained muscles found for the user.');
-        } else {
-            res.json(userMuscles);
-        }
-    } catch (error) {
-        console.error('Database error:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
 
 // ********** Start Server **********
 app.listen(PORT, () => {
