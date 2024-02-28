@@ -110,13 +110,6 @@ const MuscleProvider = ({ children }) => {
   const findMuscleImage = (muscleName) =>
     muscleImages.find((image) => image.name === muscleName)?.src;
 
-  // const checkIfAllMusclesAreTrained = (trainedMuscles) => {
-  //   const allTrained = Object.values(trainedMuscles).every(
-  //     (status) => status === true
-  //   );
-  //   setAllMusclesTrained(allTrained); // Antag att detta uppdaterar en state variabel som håller koll på om alla muskler har tränats
-  // };
-
   const markAsTrained = (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in för markera");
@@ -127,10 +120,12 @@ const MuscleProvider = ({ children }) => {
       .then((response) => {
         console.log("response ======== ", response);
         console.log("muscleName ====== ", muscleName);
-        setTrainedMuscles((prevState) => ({
-          ...prevState,
-          [muscleName]: true,
-        }));
+        setTrainedMuscles((prevState) => {
+          if (!prevState.includes(muscleName)) {
+            return [...prevState, muscleName];
+          }
+          return prevState;
+        });
         console.log("respone.trainedMuscles ======", muscleName);
       })
       .catch((error) => {
@@ -178,21 +173,6 @@ const MuscleProvider = ({ children }) => {
     // eslint-disable-next-line
   }, []);
 
-  // Hämta initial data från servern
-  // useEffect(() => {
-  //   // Antag att du har en funktion som gör API-anropet
-  //   fetch("/api/training")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setTrainedMuscles(data.trainedMuscles);
-  //       setIsActive(data.isActive);
-  //     })
-  //     .catch((error) => console.error("Failed to fetch training data", error));
-  // }, []);
-
-  // Notera: Vi tar bort useEffect för att spara till localStorage
-  // och hanterar istället detta med API-anrop när ändringar görs.
-
   // Denna logik kan behöva anpassas beroende på hur du hanterar återställningen server-sidan
   useEffect(() => {
     // Exempel: Kontrollera om det är dags för återställning och gör ett API-anrop för att återställa
@@ -211,6 +191,14 @@ const MuscleProvider = ({ children }) => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsloggedIn(isLoggedIn);
   }, []);
+
+  useEffect(() => {
+    if (trainedMuscles.length === 6) {
+      setAllMusclesTrained(true);
+    } else {
+      setAllMusclesTrained(false);
+    }
+  }, [trainedMuscles]);
 
   // Check if all muscles have been trained
 

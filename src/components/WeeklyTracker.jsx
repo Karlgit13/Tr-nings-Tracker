@@ -11,6 +11,8 @@ const WeeklyTracker = () => {
     currentWeek,
   } = useMuscle();
 
+  
+
   return (
     <div className="WeeklyTracker">
       <h2 className="text-lg text-center mt-5 text-white ">
