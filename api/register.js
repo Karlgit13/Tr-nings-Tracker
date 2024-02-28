@@ -7,7 +7,7 @@ let db; // Variabel för att lagra databasobjektet
 // Funktion för att ansluta till databasen
 const connectToDatabase = async () => {
     if (db) return; // Om databasobjektet redan finns, returnera
-    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
     db = client.db(); // Sätt databasobjektet till det anslutna klientobjektets databas
 };
 

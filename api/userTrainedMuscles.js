@@ -1,22 +1,38 @@
-// userTrainedMuscles.js
+// api/userTrainedMuscles.js
 const { MongoClient } = require('mongodb');
 
+// Reuse the database connection
+let cachedDb = null;
+
+async function connectToDatabase(uri) {
+    if (cachedDb) {
+        return cachedDb;
+    }
+    const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = client.db(process.env.DB_NAME); // Explicitly specify the database name
+    cachedDb = db;
+    return db;
+}
+
 module.exports = async (req, res) => {
-    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    const db = client.db();
-    const { userId } = req.query; // På Vercel tillgängliggörs dynamiska parametrar via req.query
+    const { userId } = req.query; // Access the userId query parameter
+
+    if (!userId) {
+        return res.status(400).send('UserId is required as a query parameter.');
+    }
 
     try {
+        const db = await connectToDatabase(process.env.MONGODB_URI);
         const userMuscles = await db.collection('userMuscles').findOne({ userId: userId });
+
         if (!userMuscles || !userMuscles.trainedMuscles || userMuscles.trainedMuscles.length === 0) {
-            res.status(404).send('No trained muscles found for the user.');
+            return res.status(404).send('No trained muscles found for the user.');
         } else {
-            res.json(userMuscles);
+            return res.json(userMuscles);
         }
     } catch (error) {
         console.error('Database error:', error);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        await client.close();
+        return res.status(500).send('Internal Server Error');
     }
+    // No need to explicitly close the database connection, as it's managed by the serverless environment
 };
