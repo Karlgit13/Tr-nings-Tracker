@@ -7,7 +7,7 @@ let db = null;
 // Connect to the database
 async function connectToDatabase() {
     if (db) return db; // Use existing database connection if available
-    const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(uri);
     db = client.db(); // Assuming your database name is stored in an environment variable
     return db;
 }
