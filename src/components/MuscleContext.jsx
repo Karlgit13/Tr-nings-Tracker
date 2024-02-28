@@ -63,6 +63,11 @@ const MuscleProvider = ({ children }) => {
       const muscleData = await getUserTrainedMuscles(userId);
       if (muscleData && muscleData.trainedMuscles) {
         setTrainedMuscles(muscleData.trainedMuscles);
+        console.log("muscleData ==== ", muscleData);
+        console.log(
+          "muscleData.trainedMuscles ==== ",
+          muscleData.trainedMuscles
+        );
       } else {
         console.log("No trained muscles data for this user.");
       }
@@ -72,9 +77,11 @@ const MuscleProvider = ({ children }) => {
   };
 
   const fetchUserIdByIdentifier = (identifier) => {
+    console.log(`Börjar hämta användar-ID för identifierare: ${identifier}`);
     fetch(`${API_BASE_URL}/getUserId?identifier=${identifier}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log("Hämtade data:", data);
         localStorage.setItem("userId", data.userId);
         setUserId(data.userId);
       })
