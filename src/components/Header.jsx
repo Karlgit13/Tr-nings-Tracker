@@ -6,14 +6,7 @@ import { Link } from "react-router-dom";
 import { resetUserMuscles } from "./api";
 
 const Header = () => {
-  const {
-    refreshPage,
-    resetTraining,
-    isLoggedIn,
-    setIsloggedIn,
-    userId,
-    setUserId,
-  } = useMuscle();
+  const { isLoggedIn, setIsloggedIn, userId, setUserId } = useMuscle();
   const [isClicked, setIsClicked] = useState();
 
   const toggleBurgare = () => {
@@ -29,11 +22,14 @@ const Header = () => {
     }
   };
 
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   return (
     <header className="Header flex justify-between items-center bg-[#01112b] font-poppins text-sm p-2 text-[#edefee] shadow-md">
       <Link to={"/"}>
         <img
-          onClick={refreshPage}
           className="w-12 h-15 rounded-full cursor-pointer"
           src={Logo}
           alt="logo"
@@ -55,7 +51,13 @@ const Header = () => {
                     <button className="red-button w-full">Min Data</button>
                   </Link>
 
-                  <button onClick={handleResetClick} className="red-button">
+                  <button
+                    onClick={async () => {
+                      await handleResetClick();
+                      refreshPage();
+                    }}
+                    className="red-button"
+                  >
                     Återställ
                   </button>
                   <button
