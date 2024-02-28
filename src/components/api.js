@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = "http://localhost:5000/api"; // Change port number if needed
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
 
 // Function to update a trained muscle for a user
 export const updateTrainedMuscle = async (userId, muscleName) => {
