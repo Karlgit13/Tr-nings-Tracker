@@ -6,15 +6,20 @@ import { useMuscle } from "./MuscleContext";
 import { markMuscleAsTrained } from "./api";
 
 const MainComponent = () => {
-  const { isActive, muscleGroups, handleTraining, userId } = useMuscle();
+  const { isActive, muscleGroups, handleTraining, userId, isLoggedIn } =
+    useMuscle();
 
   const handleMarkAsTrained = async (muscleName) => {
-    try {
-      const response = await markMuscleAsTrained(userId, muscleName);
-      // Uppdatera tillståndet eller UI baserat på svaret om det behövs
-      console.log(response.message);
-    } catch (error) {
-      console.error(error);
+    if (isLoggedIn) {
+      try {
+        const response = await markMuscleAsTrained(userId, muscleName);
+        // Uppdatera tillståndet eller UI baserat på svaret om det behövs
+        console.log(response.message);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("Du måste logga in");
     }
   };
 
