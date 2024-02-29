@@ -11,7 +11,7 @@ const connectToDatabase = async () => {
     // Om vi redan har en databasanslutning, returnera tidigt för att undvika att skapa en ny
     if (db) return db;
     // Använd MongoDB-klienten för att ansluta till databasen med URI som lagras i miljövariablerna
-    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
     db = client.db(); // Spara databasobjektet för senare användning
     return db;
 };

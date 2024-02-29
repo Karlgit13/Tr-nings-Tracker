@@ -33,7 +33,7 @@ app.use(cors()); // Allow CORS for all domains
 let db;
 const connectToDatabase = async () => {
     if (db) return db; // Return existing connection if it exists
-    const client = await MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
     db = client.db();
     return db;
 };

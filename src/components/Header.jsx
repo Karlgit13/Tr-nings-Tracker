@@ -54,7 +54,7 @@ const Header = () => {
                   <button
                     onClick={async () => {
                       await handleResetClick();
-                      // refreshPage();
+                      refreshPage();
                     }}
                     className="red-button"
                   >

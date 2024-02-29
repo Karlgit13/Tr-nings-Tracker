@@ -7,7 +7,7 @@ router.get('/:userId', async (req, res) => {
     try {
         const userMuscles = await req.db.collection('userMuscles').findOne({ userId: userId });
         if (!userMuscles || !userMuscles.trainedMuscles || userMuscles.trainedMuscles.length === 0) {
-            res.status(404).send('No trained muscles found for the user.');
+            return res.status(200).json({ message: 'inget att hämta, gå till gymmet' });
         } else {
             res.json(userMuscles);
         }
