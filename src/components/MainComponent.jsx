@@ -3,9 +3,20 @@ import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
 import Header from "./Header";
 import { useMuscle } from "./MuscleContext";
+import { markMuscleAsTrained } from "./api";
 
 const MainComponent = () => {
-  const { isActive, muscleGroups, handleTraining } = useMuscle();
+  const { isActive, muscleGroups, handleTraining, userId } = useMuscle();
+
+  const handleMarkAsTrained = async (muscleName) => {
+    try {
+      const response = await markMuscleAsTrained(userId, muscleName);
+      // Uppdatera tillståndet eller UI baserat på svaret om det behövs
+      console.log(response.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="MainComponent">
@@ -20,17 +31,17 @@ const MainComponent = () => {
             <h3 className="text-center">{group.name}</h3>
             <button
               className="red-button w-full"
-              onClick={() => handleTraining(group.name)}
+              onClick={() => handleMarkAsTrained(group.name)}
             >
               Tränad
             </button>
-            {isActive[group.name] && (
-              <Timer
-                key={Date.now()} // Forces re-mount to reset timer
-                restPeriod={group.restPeriod}
-                muscleName={group.name}
-              />
-            )}
+
+            <Timer
+              key={Date.now()} // Forces re-mount to reset timer
+              restPeriod={group.restPeriod}
+              muscleName={group.name}
+              userId={userId}
+            />
           </div>
         ))}
       </div>

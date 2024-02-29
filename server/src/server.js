@@ -19,6 +19,8 @@ const muscleGroupRoutes = require('./routes/muscleGroupRoutes');
 const resetUserMusclesRoute = require('./routes/resetUserMusclesRoute');
 const getUserIdRoute = require('./routes/getUserIdRoute');
 const userTrainedMusclesRoute = require('./routes/userTrainedMusclesRoute');
+const markMuscleTrainedRoutes = require('./routes/markMuscleTrainedRoutes');
+const userMusclesTimerRoutes = require('./routes/userMusclesTimerRoutes');
 
 
 // ********** Express App Setup **********
@@ -57,6 +59,8 @@ app.use('/api', muscleGroupRoutes);
 app.use('/api/resetUserMuscles', resetUserMusclesRoute);
 app.use('/api/getUserId', getUserIdRoute);
 app.use('/api/userTrainedMuscles', userTrainedMusclesRoute);
+app.use("/api", markMuscleTrainedRoutes)
+app.use('/api', userMusclesTimerRoutes);
 
 
 
@@ -64,3 +68,4 @@ app.use('/api/userTrainedMuscles', userTrainedMusclesRoute);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+

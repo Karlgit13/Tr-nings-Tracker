@@ -4,6 +4,7 @@ import Logo from "../assets/nylogo.webp";
 import { useMuscle } from "./MuscleContext";
 import { Link } from "react-router-dom";
 import { resetUserMuscles } from "./api";
+import LiveClock from "react-live-clock";
 
 const Header = () => {
   const { isLoggedIn, setIsloggedIn, userId, setUserId } = useMuscle();
@@ -44,6 +45,7 @@ const Header = () => {
               alt={Burgare}
               className=" w-12 cursor-pointer"
             />
+            
             {isClicked && (
               <div className="flex flex-col absolute p-8 bg-[#01112b] z-10 right-0 gap-1 -mr-5 rounded w-[200px] md:w-[350px]">
                 <>
@@ -71,6 +73,7 @@ const Header = () => {
                   >
                     Logga ut
                   </button>
+                  <LiveClock format={"HH:mm:ss"} ticking={true} timezone={"Europe/Stockholm"}/>
                 </>
               </div>
             )}

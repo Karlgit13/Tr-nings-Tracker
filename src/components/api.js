@@ -3,6 +3,43 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 
 
+export const getUserTrainingEndTimes = async (userId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/userMusclesTimer/${userId}`, {
+            method: 'GET'
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch training end times');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching training end times:', error);
+        throw error;
+    }
+};
+
+
+
+export const markMuscleAsTrained = async (userId, muscleName) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/markMuscleTrained`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, muscleName }),
+        });
+        if (!response.ok) {
+            throw new Error('Failed to mark muscle as trained');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to mark muscle as trained', error);
+        throw error;
+    }
+};
+
 
 // Function to reset trained muscles for a user
 export const resetUserMuscles = async (userId) => {
