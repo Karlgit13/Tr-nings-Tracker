@@ -29,9 +29,9 @@ const MainComponent = () => {
       <Header />
       <WeeklyTracker />
       <h1 className="mt-8 text-center text-white mb-3">
-        Markera Muskler som tränade
+        Återhämtnings Tider:
       </h1>
-      <div className="grid grid-cols-3 place-items-center text-white gap-y-5">
+      <div className="MainComponent grid grid-cols-3 place-items-center text-white gap-y-5">
         {muscleGroups.map((group) => (
           <div className="MuskelGrupperDiv w-4/5" key={group.name}>
             <h3 className="text-center">{group.name}</h3>
