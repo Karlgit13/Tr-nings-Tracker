@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 
 // Anslutningssträngen till din MongoDB
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
 
 module.exports = async (req, res) => {
     if (req.method === 'POST') {
