@@ -1,9 +1,13 @@
 // API configuration
+
+
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 
 
 export const getUserTrainingEndTimes = async (userId) => {
+
     try {
         const response = await fetch(`${API_BASE_URL}/userMusclesTimer/${userId}`, {
             method: 'GET'

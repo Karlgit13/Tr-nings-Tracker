@@ -68,6 +68,7 @@ const Header = () => {
                       localStorage.removeItem("userId");
                       setIsloggedIn(false);
                       setUserId(null);
+                      refreshPage();
                     }}
                     className="red-button w-full"
                   >

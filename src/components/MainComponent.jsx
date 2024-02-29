@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
 import Header from "./Header";
@@ -6,14 +6,15 @@ import { useMuscle } from "./MuscleContext";
 import { markMuscleAsTrained } from "./api";
 
 const MainComponent = () => {
-  const { isActive, muscleGroups, handleTraining, userId, isLoggedIn } =
-    useMuscle();
+  const [lastTrained, setLastTrained] = useState({});
+  const { muscleGroups, userId, isLoggedIn } = useMuscle();
 
   const handleMarkAsTrained = async (muscleName) => {
     if (isLoggedIn) {
       try {
         const response = await markMuscleAsTrained(userId, muscleName);
         // Uppdatera tillståndet eller UI baserat på svaret om det behövs
+        setLastTrained({ muscleName, timestamp: Date.now() });
         console.log(response.message);
       } catch (error) {
         console.error(error);
@@ -40,13 +41,16 @@ const MainComponent = () => {
             >
               Tränad
             </button>
-
-            <Timer
-              key={Date.now()} // Forces re-mount to reset timer
-              restPeriod={group.restPeriod}
-              muscleName={group.name}
-              userId={userId}
-            />
+            <div>
+              <Timer
+                key={Date.now()} // Forces re-mount to reset timer
+                restPeriod={group.restPeriod}
+                muscleName={group.name}
+                userId={userId}
+                isLoggedIn={isLoggedIn}
+                lastTrained={lastTrained}
+              />
+            </div>
           </div>
         ))}
       </div>

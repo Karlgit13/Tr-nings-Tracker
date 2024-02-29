@@ -23,6 +23,8 @@ const MuscleProvider = ({ children }) => {
   const [isLoggedIn, setIsloggedIn] = useState(false);
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
+  const [lastTrained, setLastTrained] = useState({});
+  const [trainingEnd, setTrainingEnd] = useState("");
 
   // ********** Static Data **********
   const muscleGroups = [
@@ -158,6 +160,10 @@ const MuscleProvider = ({ children }) => {
     setUserId,
     fetchUserIdByIdentifier,
     updateMusclesFromDB,
+    lastTrained,
+    setLastTrained,
+    trainingEnd,
+    setTrainingEnd,
   };
 
   return (
