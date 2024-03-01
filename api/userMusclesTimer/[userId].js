@@ -30,8 +30,48 @@ module.exports = async (req, res) => {
             // Stäng anslutningen till databasen
             await client.close();
         }
+    } else if (req.method === 'POST') {
+        try {
+            // Extract userId from URL parameters or body, depending on your API design
+            const { userId } = req.body; // Or req.query, if you're passing userId in the query string
+
+            // Ensure the client is connected to the database
+            await client.connect();
+            const db = client.db(); // Add your database name here
+
+            // Attempt to retrieve the user's muscle data
+            const userMuscles = await db.collection('userMusclesTimer').findOne({ userId: userId });
+
+            // Check if userMuscles exists and has trainedMuscles
+            if (!userMuscles || !userMuscles.trainedMuscles) {
+                return res.status(404).json({ message: 'User training times not found' });
+            }
+
+            // Create the update object to reset all trainedUntil times
+            const updateObject = {
+                $set: {}
+            };
+            for (const muscle in userMuscles.trainedMuscles) {
+                updateObject.$set[`trainedMuscles.${muscle}.trainedUntil`] = "";
+            }
+
+            // Perform the update
+            const updateResult = await db.collection('userMusclesTimer').updateOne({ userId: userId }, updateObject);
+
+            if (updateResult.modifiedCount === 0) {
+                return res.status(404).json({ message: 'User or muscle not found' });
+            }
+
+            res.json({ message: 'All muscle timers reset successfully' });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            // Close the database connection
+            await client.close();
+        }
     } else {
-        // Hantera andra HTTP-metoder eller returnera ett fel
+        // Handle other HTTP methods or return an error
         res.status(405).send('Method Not Allowed');
     }
 };
