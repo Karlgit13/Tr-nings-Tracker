@@ -38,6 +38,11 @@ const MainComponent = () => {
               recoveryTimes[group.name] &&
               recoveryTimes[group.name].trainedUntil
           )
+          .sort(
+            (a, b) =>
+              new Date(recoveryTimes[a.name].trainedUntil).getTime() -
+              new Date(recoveryTimes[b.name].trainedUntil).getTime()
+          )
           .map((group) => (
             <div
               className="MuskelGrupperDiv bg-blue-500 p-4 rounded w-4/5 max-w-sm text-center text-black"
