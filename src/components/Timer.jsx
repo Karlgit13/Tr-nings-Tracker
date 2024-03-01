@@ -45,7 +45,10 @@ const Timer = ({ userId, muscleName, isLoggedIn }) => {
   return (
     <div className="Timer">
       {trainingEnd.length > 0 && (
-        <p className="p-timer">Återhämtning till - {formatedTrainingEnd}</p>
+        <p className="p-timer">
+          Återhämtning till -{" "}
+          <span className="text-red-600 font-bold text-lg md:text-xl">{formatedTrainingEnd}</span>
+        </p>
       )}
     </div>
   );

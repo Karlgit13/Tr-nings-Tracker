@@ -3,18 +3,29 @@ import Burgare from "../assets/icons8-menu-50.png";
 import Logo from "../assets/nylogo.webp";
 import { useMuscle } from "./MuscleContext";
 import { Link } from "react-router-dom";
-import { resetUserMuscles } from "./api";
+import { resetUserMuscles, resetUserMuscleTimer } from "./api";
 import LiveClock from "react-live-clock";
 
 const Header = () => {
-  const { isLoggedIn, setIsloggedIn, userId, setUserId } = useMuscle();
+  const { isLoggedIn, setIsloggedIn, userId, setUserId, muscleGroups } =
+    useMuscle();
   const [isClicked, setIsClicked] = useState();
 
   const toggleBurgare = () => {
     setIsClicked(!isClicked);
   };
 
-  const handleResetClick = async () => {
+  const handleRecoveryResetClick = async (userId, muscleName) => {
+    try {
+      const response = await resetUserMuscleTimer(userId, muscleName);
+      console.log(response.message);
+      // Uppdatera UI här om nödvändigt
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleWeekResetClick = async (userId) => {
     try {
       await resetUserMuscles(userId); // Use userId directly here
       console.log("muscles reset success");
@@ -55,12 +66,21 @@ const Header = () => {
 
                   <button
                     onClick={async () => {
-                      await handleResetClick();
+                      await handleWeekResetClick(userId);
                       refreshPage();
                     }}
                     className="red-button"
                   >
-                    Återställ
+                    Återställ Vecka
+                  </button>
+                  <button
+                    onClick={async () => {
+                      await handleRecoveryResetClick(userId);
+                      refreshPage();
+                    }}
+                    className="red-button"
+                  >
+                    Återställ Återhämtning
                   </button>
                   <button
                     onClick={() => {

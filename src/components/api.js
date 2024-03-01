@@ -5,6 +5,26 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 
+export const resetUserMuscleTimer = async (userId, muscleName) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/resetMuscleTimer/${userId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ muscleName })
+        })
+        if (!response.ok) {
+            throw new Error("failed to reset muscle timer")
+        }
+        const data = await response.json()
+        return data;
+    }
+    catch (error) {
+        console.error("error resetting muscle timer:", error)
+        throw error;
+    }
+}
 
 export const getUserTrainingEndTimes = async (userId) => {
 
