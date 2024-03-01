@@ -48,7 +48,7 @@ const MainComponent = () => {
                 muscleName={group.name}
                 userId={userId}
                 isLoggedIn={isLoggedIn}
-                trainingEnd={recoveryTimes[group.name]?.trainedUntil} // Pass the specific training end time
+                trainingEnd={recoveryTimes[group.name]?.trainedUntil}
               />
             </div>
           ))}
