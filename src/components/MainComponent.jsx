@@ -3,7 +3,7 @@ import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
 import Header from "./Header";
 import { useMuscle } from "./MuscleContext";
-import { getUserTrainingEndTimes } from "./api"; // Assuming this can fetch all relevant times
+import { getUserTrainingEndTimes } from "./api";
 
 const MainComponent = () => {
   const { muscleGroups, userId, isLoggedIn } = useMuscle();
