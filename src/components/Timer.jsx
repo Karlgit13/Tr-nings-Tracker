@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUserTrainingEndTimes } from "./api";
-
+//ok
 const Timer = ({ userId, muscleName, isLoggedIn }) => {
   const [trainingEnd, setTrainingEnd] = useState("");
 
@@ -47,7 +47,9 @@ const Timer = ({ userId, muscleName, isLoggedIn }) => {
       {trainingEnd.length > 0 && (
         <p className="p-timer">
           Återhämtning till -{" "}
-          <span className="text-red-600 font-bold text-lg md:text-xl">{formatedTrainingEnd}</span>
+          <span className="text-red-600 font-bold text-lg md:text-xl">
+            {formatedTrainingEnd}
+          </span>
         </p>
       )}
     </div>
