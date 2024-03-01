@@ -7,8 +7,7 @@ import { resetUserMuscles, resetUserMuscleTimer } from "./api";
 import LiveClock from "react-live-clock";
 
 const Header = () => {
-  const { isLoggedIn, setIsloggedIn, userId, setUserId, muscleGroups } =
-    useMuscle();
+  const { isLoggedIn, setIsloggedIn, userId, setUserId } = useMuscle();
   const [isClicked, setIsClicked] = useState();
 
   const toggleBurgare = () => {
@@ -19,7 +18,6 @@ const Header = () => {
     try {
       const response = await resetUserMuscleTimer(userId, muscleName);
       console.log(response.message);
-      // Uppdatera UI här om nödvändigt
     } catch (error) {
       console.error(error);
     }
@@ -27,7 +25,7 @@ const Header = () => {
 
   const handleWeekResetClick = async (userId) => {
     try {
-      await resetUserMuscles(userId); // Use userId directly here
+      await resetUserMuscles(userId);
       console.log("muscles reset success");
     } catch (error) {
       console.error("fail", error);
