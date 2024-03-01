@@ -3,6 +3,7 @@ import {
   updateTrainedMuscle,
   getUserTrainedMuscles,
   addMuscleGroups,
+  markMuscleAsTrained,
 } from "./api";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -92,6 +93,23 @@ const MuscleProvider = ({ children }) => {
       });
   };
 
+  // markerar de nedre
+  const handleMarkAsTrained = async (muscleName) => {
+    if (isLoggedIn) {
+      try {
+        const response = await markMuscleAsTrained(userId, muscleName);
+        // Uppdatera tillståndet eller UI baserat på svaret om det behövs
+        setLastTrained({ muscleName, timestamp: Date.now() });
+        console.log(response.message);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("Du måste logga in");
+    }
+  };
+
+  // övre
   const markAsTrained = (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in för markera");
@@ -104,6 +122,7 @@ const MuscleProvider = ({ children }) => {
       .catch((error) => {
         console.error("fail", error);
       });
+    handleMarkAsTrained(muscleName);
   };
 
   // ********** Effects **********
@@ -164,6 +183,7 @@ const MuscleProvider = ({ children }) => {
     setLastTrained,
     trainingEnd,
     setTrainingEnd,
+    handleMarkAsTrained,
   };
 
   return (

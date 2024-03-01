@@ -16,7 +16,7 @@ const WeeklyTracker = () => {
       <h2 className="text-lg text-center mt-5 text-white ">
         Vecka <span className="text-red-500">{currentWeek}</span> träning
       </h2>
-      <div className="flex flex-row justify-center flex-wrap p-4">
+      <div className="WeeklyTracker flex flex-row justify-center flex-wrap p-4">
         {muscleGroups.map((group, index) => (
           <div key={index}>
             <button
