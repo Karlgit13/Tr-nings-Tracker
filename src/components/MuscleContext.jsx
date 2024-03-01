@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   updateTrainedMuscle,
   getUserTrainedMuscles,
@@ -27,14 +27,14 @@ const MuscleProvider = ({ children }) => {
   const [lastTrained, setLastTrained] = useState({});
 
   // ********** Static Data **********
-  const muscleGroups = [
+  const muscleGroups = useMemo(() => [
     { name: "Bröst", restPeriod: 48 },
     { name: "Rygg", restPeriod: 48 },
     { name: "Ben", restPeriod: 72 },
     { name: "Axlar", restPeriod: 48 },
     { name: "Armar", restPeriod: 48 },
     { name: "Mage", restPeriod: 24 },
-  ];
+  ], []);
 
   const muscleImages = [
     { name: "Mage", src: require("../assets/abs1.png") },
@@ -146,8 +146,8 @@ const MuscleProvider = ({ children }) => {
     addMuscleGroups(muscleGroups)
       .then((response) => console.log("Muscle groups added:", response))
       .catch((error) => console.error("Error adding muscle groups:", error));
-    // eslint-disable-next-line
-  }, []);
+
+  }, [muscleGroups]);
 
   useEffect(() => {
     if (trainedMuscles.length === 6) {
