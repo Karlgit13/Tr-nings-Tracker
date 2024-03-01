@@ -13,7 +13,7 @@ const WeeklyTracker = () => {
 
   return (
     <div className="WeeklyTracker">
-      <h2 className="text-lg text-center mt-5 text-white ">
+      <h2 className="text-lg text-center mt-5 text-white textShadow">
         Vecka <span className="text-red-500">{currentWeek}</span> träning
       </h2>
       <div className="WeeklyTracker flex flex-row justify-center flex-wrap p-4">
@@ -32,7 +32,7 @@ const WeeklyTracker = () => {
                 alt={group.name}
               />
               {trainedMuscles.includes(group.name) && (
-                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-green-700">
+                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-blue-600">
                   &#10004;
                 </span>
               )}
@@ -42,7 +42,7 @@ const WeeklyTracker = () => {
         ))}
       </div>
       {allMusclesTrained && (
-        <p className="font-poppins mt-[-10px] text-center p-4 font-bold text-shadow text-red-500">
+        <p className="font-poppins mt-[-10px] text-center p-4 font-bold text-shadow text-white textShadow">
           Bra jobbat! <br /> Alla muskler har tränats denna vecka!
         </p>
       )}
