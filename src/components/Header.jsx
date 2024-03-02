@@ -45,6 +45,12 @@ const Header = () => {
           alt="logo"
         />
       </Link>
+      <LiveClock
+        className="text-md textShadow"
+        format={"HH:mm:ss"}
+        ticking={true}
+        timezone={"Europe/Stockholm"}
+      />
       <div className="relative">
         {isLoggedIn ? (
           <div>
@@ -92,11 +98,6 @@ const Header = () => {
                   >
                     Logga ut
                   </button>
-                  <LiveClock
-                    format={"HH:mm:ss"}
-                    ticking={true}
-                    timezone={"Europe/Stockholm"}
-                  />
                 </>
               </div>
             )}

@@ -4,24 +4,38 @@ import { useMuscle } from "./MuscleContext";
 import Header from "./Header";
 
 const SavedData = () => {
-  const { userId, isLoggedIn } = useMuscle();
+  const { userId, isLoggedIn, muscleGroups } = useMuscle();
   const [weeklyReports, setWeeklyReports] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (isLoggedIn) {
-        const reports = await fetchUserWeeklyReport(userId);
-        setWeeklyReports(reports);
+        try {
+          const reports = await fetchUserWeeklyReport(userId);
+          if (Array.isArray(reports)) {
+            setWeeklyReports(reports);
+          } else {
+            setWeeklyReports([]);
+          }
+        } catch (error) {
+          setWeeklyReports([]);
+        }
       }
     };
 
     fetchData();
   }, [userId, isLoggedIn]);
 
+  const isMuscleTrained = (muscleName, trainedMuscles) => {
+    return trainedMuscles.includes(muscleName);
+  };
+
   return (
     <div>
       <Header />
-
+      <div className="flex justify-center p-4 text-white textShadow">
+        <h1>Här lagras dina veckor</h1>
+      </div>
       <div className="flex flex-col w-full place-items-center textShadow p-4">
         {weeklyReports.length > 0 ? (
           <div className="text-white bg-blue-500 w-[90vw] p-2 rounded">
@@ -31,12 +45,16 @@ const SavedData = () => {
                   Vecka: <span className="text-red-500">{report.weekOf}</span>
                 </h3>
                 <ul className="flex flex-row justify-evenly p-2">
-                  {report.trainedMuscles.map((muscle, index) => (
-                    <li className="relative" key={index}>
-                      {muscle}{" "}
+                  {muscleGroups.map((muscle, muscleIndex) => (
+                    <li key={muscleIndex} className="grid place-items-center">
+                      {muscle.name}
                       <img
-                        className="w-5 absolute -right-7 top-1"
-                        src={require("../assets/check.png")}
+                        className="w-6"
+                        src={
+                          isMuscleTrained(muscle.name, report.trainedMuscles)
+                            ? require("../assets/check.png")
+                            : require("../assets/close.png")
+                        }
                         alt=""
                       />
                     </li>
@@ -46,7 +64,7 @@ const SavedData = () => {
             ))}
           </div>
         ) : (
-          <p>Ingen data.</p>
+          <p className="p-2 text-white">Ingen data.</p>
         )}
       </div>
     </div>

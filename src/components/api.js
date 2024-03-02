@@ -1,23 +1,17 @@
 // API configuration
-
-
-
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-// Frontend code to call the API
+
 export const fetchUserWeeklyReport = async (userId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/getUserWeeklyReport?userId=${userId}`);
-        console.log("response: ", response);
         if (!response.ok) {
             throw new Error('Failed to fetch user weekly reports');
         }
         const data = await response.json();
-        console.log("data: ", data);
         return data;
     } catch (error) {
         console.error('Error fetching user weekly reports:', error);
-        // Handle the error according to your frontend logic
     }
 };
 
@@ -44,7 +38,6 @@ export const resetUserMuscleTimer = async (userId, muscleName) => {
     }
 }
 
-// api.js
 export const getUserTrainingEndTimes = async (userId) => {
 
     try {
@@ -84,7 +77,6 @@ export const markMuscleAsTrained = async (userId, muscleName) => {
 };
 
 
-// Function to reset trained muscles for a user
 export const resetUserMuscles = async (userId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/resetUserMuscles`, {
@@ -92,7 +84,7 @@ export const resetUserMuscles = async (userId) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId }), // Include userId in the request body
+            body: JSON.stringify({ userId }),
         });
         if (!response.ok) {
             throw new Error('Failed to reset user muscles');
@@ -104,14 +96,13 @@ export const resetUserMuscles = async (userId) => {
     }
 };
 
-// Function todsa update a trained muscle for a user
 export const updateTrainedMuscle = async (userId, muscleName) => {
     const response = await fetch(`${API_BASE_URL}/trainedMuscle`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, muscleName }), // Include userId in the request
+        body: JSON.stringify({ userId, muscleName }),
     });
     if (!response.ok) {
         throw new Error('Failed to update trained muscle');
@@ -119,14 +110,12 @@ export const updateTrainedMuscle = async (userId, muscleName) => {
     return response.json();
 };
 
-// Function to get trained muscles for a user
 export const getUserTrainedMuscles = async (userId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/userTrainedMuscles/${userId}`, {
             method: 'GET'
         });
         if (response.status === 404) {
-            // No data found, handle appropriately, e.g., by informing the user
             return null;
         }
         if (!response.ok) {
@@ -139,7 +128,6 @@ export const getUserTrainedMuscles = async (userId) => {
     }
 };
 
-// Function to add muscle groups
 export const addMuscleGroups = async (muscleGroups) => {
     try {
         const response = await fetch(`${API_BASE_URL}/muscleGroups`, {
@@ -159,32 +147,3 @@ export const addMuscleGroups = async (muscleGroups) => {
     }
 };
 
-// The following functions can be uncommented and modified as needed for additional functionality
-
-/*
-// Function to activate a muscle group
-export const activateMuscleGroup = async (groupName) => {
-    const response = await fetch(`${API_BASE_URL}/activateMuscleGroup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ groupName }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to activate muscle group');
-    }
-    return response.json();
-};
-
-// Function to reset all training
-export const resetAllTraining = async () => {
-    const response = await fetch(`${API_BASE_URL}/resetAllTraining`, {
-        method: 'POST',
-    });
-    if (!response.ok) {
-        throw new Error('Failed to reset all training');
-    }
-    return response.json();
-};
-*/
