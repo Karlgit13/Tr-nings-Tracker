@@ -24,7 +24,7 @@ const MainComponent = () => {
     };
 
     fetchRecoveryTimes();
-  }, [userId, isLoggedIn, recoveryTimes]);
+  }, [userId, isLoggedIn]);
 
   return (
     <div className="MainComponent">

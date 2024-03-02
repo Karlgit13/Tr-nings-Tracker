@@ -26,6 +26,7 @@ export const resetUserMuscleTimer = async (userId, muscleName) => {
     }
 }
 
+// api.js
 export const getUserTrainingEndTimes = async (userId) => {
 
     try {
