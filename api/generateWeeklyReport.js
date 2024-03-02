@@ -39,11 +39,11 @@ const createWeeklyReport = async (db) => {
 };
 
 module.exports = async (req, res) => {
-    let client;
+    let client; // This will hold our MongoClient instance
 
     try {
         client = await connectToDatabase();
-        const db = client.db();
+        const db = client.db(); // Get the db instance from the client
 
         if (req.method === 'GET') {
             if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
         res.status(500).send('Internal Server Error');
     } finally {
         // Close the client connection if it was opened
-        if (client) {
+        if (client && client.close) {
             await client.close();
         }
     }
