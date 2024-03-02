@@ -47,7 +47,7 @@ const MainComponent = () => {
           )
           .map((group) => (
             <div
-              className="MuskelGrupperDiv bg-blue-600 p-2 rounded w-[90vw] max-w-sm text-left text-black"
+              className="MuskelGrupperDiv bg-blue-500 p-2 rounded w-[90vw] max-w-sm text-left text-black"
               key={group.name}
             >
               <h3 className="text-red-500 font-bold text-lg md:text-xl textShadow mb-1">

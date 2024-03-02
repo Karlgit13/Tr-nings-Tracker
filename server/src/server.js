@@ -5,6 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
+const cron = require('node-cron');
 
 // ********** Route Handlers Imports **********
 const registerHandler = require('./handlers/registerHandler');
@@ -69,3 +70,30 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+
+// Function to be run every Sunday at 23:00
+const createWeeklyReport = async () => {
+    // Connect to the database if not already connected
+    await connectToDatabase();
+
+    // Query all users' trained muscles data
+    const users = await db.collection('userMuscles').find().toArray();
+
+    // Iterate over each user and create a weekly report
+    for (const user of users) {
+        // Create a report entry for the current week
+        const reportEntry = {
+            userId: user.userId,
+            trainedMuscles: user.trainedMuscles,
+            weekOf: new Date() // This date can be adjusted to the beginning of the current week if necessary
+        };
+
+        // Insert the report entry into the userWeeklyReport collection
+        await db.collection('userWeeklyReport').insertOne(reportEntry);
+    }
+};
+
+// Schedule the function to run every Sunday at 23:00
+cron.schedule('0 23 * * 0', () => {
+    createWeeklyReport();
+});
