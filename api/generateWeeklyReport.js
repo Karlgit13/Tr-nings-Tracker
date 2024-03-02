@@ -41,18 +41,27 @@ module.exports = async (req, res) => {
     }
 };
 
+const getWeekNumber = (date) => {
+    const newDate = new Date(
+        Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    newDate.setUTCDate(newDate.getUTCDate() + 4 - (newDate.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(newDate.getUTCFullYear(), 0, 1));
+    return Math.ceil(((newDate - yearStart) / 86400000 + 1) / 7);
+};
+
 // Function to be run by the cron job
 const createWeeklyReport = async (db) => {
-    // Logic for creating the weekly report
-    const users = await db.collection('userMuscles').find().toArray();
+    const today = new Date();
+    const todaysWeekNumber = getWeekNumber(today);
 
+    const users = await db.collection('userMuscles').find().toArray();
     for (const user of users) {
         const reportEntry = {
             userId: user.userId,
             trainedMuscles: user.trainedMuscles,
-            weekOf: new Date() // Adjust as needed for the start of the week
+            weekOf: todaysWeekNumber
         };
-
         await db.collection('userWeeklyReport').insertOne(reportEntry);
     }
 };
