@@ -38,19 +38,22 @@ const Header = () => {
 
   return (
     <header className="Header flex justify-between items-center bg-[#01112b] font-poppins text-sm p-2 text-[#edefee] shadow-md">
-      <Link to={"/"}>
-        <img
-          className="w-12 h-15 rounded-full cursor-pointer"
-          src={Logo}
-          alt="logo"
+      <div>
+        <Link to={"/"}>
+          <img
+            className="w-12 h-15 rounded-full cursor-pointer"
+            src={Logo}
+            alt="logo"
+          />
+        </Link>
+        <LiveClock
+          className="text-md textShadow"
+          format={"HH:mm:ss"}
+          ticking={true}
+          timezone={"Europe/Stockholm"}
         />
-      </Link>
-      <LiveClock
-        className="text-md textShadow"
-        format={"HH:mm:ss"}
-        ticking={true}
-        timezone={"Europe/Stockholm"}
-      />
+      </div>
+
       <div className="relative">
         {isLoggedIn ? (
           <div>
@@ -58,7 +61,7 @@ const Header = () => {
               onClick={toggleBurgare}
               src={Burgare}
               alt={Burgare}
-              className=" w-12 cursor-pointer"
+              className=" w-12 cursor-pointer mr-1"
             />
 
             {isClicked && (
