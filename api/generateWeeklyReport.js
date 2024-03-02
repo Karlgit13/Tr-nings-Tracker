@@ -12,34 +12,6 @@ const connectToDatabase = async () => {
     return db;
 };
 
-module.exports = async (req, res) => {
-    // Check for a secret token to verify that the request is authorized
-    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-        return res.status(401).send('Unauthorized');
-    }
-
-    try {
-        const db = await connectToDatabase();
-
-        // Accept GET requests by the cron job
-        if (req.method === 'GET') {
-            // Call your logic function to create the weekly report
-            await createWeeklyReport(db);
-            return res.status(200).send('Weekly report generated');
-        } else {
-            // If you want to handle other methods, you can add them here
-            return res.status(405).send('Method Not Allowed');
-        }
-    } catch (error) {
-        console.error('Error generating weekly report:', error);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        // Close the database connection if it was opened
-        if (db) {
-            await db.close();
-        }
-    }
-};
 
 const getWeekNumber = (date) => {
     const newDate = new Date(
@@ -63,5 +35,34 @@ const createWeeklyReport = async (db) => {
             weekOf: todaysWeekNumber
         };
         await db.collection('userWeeklyReport').insertOne(reportEntry);
+    }
+};
+
+module.exports = async (req, res) => {
+    let client;
+
+    try {
+        client = await connectToDatabase();
+        const db = client.db();
+
+        if (req.method === 'GET') {
+            if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+                return res.status(401).send('Unauthorized');
+            }
+
+            // Call your logic function to create the weekly report
+            await createWeeklyReport(db);
+            return res.status(200).send('Weekly report generated');
+        } else {
+            return res.status(405).send('Method Not Allowed');
+        }
+    } catch (error) {
+        console.error('Error generating weekly report:', error);
+        res.status(500).send('Internal Server Error');
+    } finally {
+        // Close the client connection if it was opened
+        if (client) {
+            await client.close();
+        }
     }
 };
