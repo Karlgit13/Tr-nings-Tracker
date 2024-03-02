@@ -1,15 +1,14 @@
 // /api/generateWeeklyReport.js
 const { MongoClient } = require('mongodb');
 
-let db;
+let client;
 
 // Connect to the database if not already connected
 const connectToDatabase = async () => {
-    if (db) return db;
-    const client = new MongoClient(process.env.MONGODB_URI);
+    if (client) return client.db();
+    client = new MongoClient(process.env.MONGODB_URI);
     await client.connect();
-    db = client.db(); // Assuming you have a default database set in your connection string
-    return db;
+    return client.db(); // Assuming you have a default database set in your connection string
 };
 
 module.exports = async (req, res) => {
@@ -35,8 +34,8 @@ module.exports = async (req, res) => {
         res.status(500).send('Internal Server Error');
     } finally {
         // Close the database connection if it was opened
-        if (db) {
-            await db.close();
+        if (client) {
+            await client.close();
         }
     }
 };
