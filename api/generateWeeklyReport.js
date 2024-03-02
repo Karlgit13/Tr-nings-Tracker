@@ -12,34 +12,31 @@ const connectToDatabase = async () => {
     return db;
 };
 
-
-
-
 module.exports = async (req, res) => {
-    let client; // This will hold our MongoClient instance
+    // Check for a secret token to verify that the request is authorized
+    if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+        return res.status(401).send('Unauthorized');
+    }
 
     try {
-        client = await connectToDatabase();
-        const db = client.db(); // Get the db instance from the client
+        const db = await connectToDatabase();
 
+        // Accept GET requests by the cron job
         if (req.method === 'GET') {
-            if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-                return res.status(401).send('Unauthorized');
-            }
-
             // Call your logic function to create the weekly report
             await createWeeklyReport(db);
             return res.status(200).send('Weekly report generated');
         } else {
+            // If you want to handle other methods, you can add them here
             return res.status(405).send('Method Not Allowed');
         }
     } catch (error) {
         console.error('Error generating weekly report:', error);
-        return res.status(500).send('Internal Server Error');
+        res.status(500).send('Internal Server Error');
     } finally {
-        // Close the client connection if it was opened
-        if (client) {
-            await client.close();
+        // Close the database connection if it was opened
+        if (db) {
+            await db.close();
         }
     }
 };
