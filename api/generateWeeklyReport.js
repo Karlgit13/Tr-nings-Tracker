@@ -6,10 +6,7 @@ let db;
 // Connect to the database if not already connected
 const connectToDatabase = async () => {
     if (db) return db;
-    const client = new MongoClient(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    const client = new MongoClient(process.env.MONGODB_URI);
     await client.connect();
     db = client.db(); // Assuming you have a default database set in your connection string
     return db;
