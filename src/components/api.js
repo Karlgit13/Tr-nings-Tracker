@@ -4,6 +4,24 @@
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
+// Frontend code to call the API
+export const fetchUserWeeklyReport = async (userId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/getUserWeeklyReport?userId=${userId}`);
+        console.log("response: ", response);
+        if (!response.ok) {
+            throw new Error('Failed to fetch user weekly reports');
+        }
+        const data = await response.json();
+        console.log("data: ", data);
+        return data;
+    } catch (error) {
+        console.error('Error fetching user weekly reports:', error);
+        // Handle the error according to your frontend logic
+    }
+};
+
+
 
 export const resetUserMuscleTimer = async (userId, muscleName) => {
     try {
