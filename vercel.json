@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/generateWeeklyReport",
-      "schedule": "* 12 * * *" // This will run the job at 12:00 PM server time
+      "schedule": "5 12 * * *"
     }
   ]
 }
