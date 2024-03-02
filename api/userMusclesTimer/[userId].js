@@ -1,19 +1,27 @@
 // api/userMusclesTimer.js
 const { MongoClient } = require('mongodb');
 
-// Anslutningssträngen till din MongoDB - se till att detta är säkert hanterat i din miljökonfiguration
+// Connection string to your MongoDB - ensure this is securely handled in your environment configuration
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+
+// Function to connect to the database
+async function connectToDatabase() {
+    const client = new MongoClient(uri);
+    await client.connect();
+    return client;
+}
 
 module.exports = async (req, res) => {
-    if (req.method === 'GET') {
-        try {
+    let client;
+
+    try {
+        // Connect to the database
+        client = await connectToDatabase();
+        const db = client.db(); // Add your database name here if needed
+
+        if (req.method === 'GET') {
             // Hämta userId från URL-parametern
             const { userId } = req.query;
-
-            // Se till att klienten är ansluten till databasen
-            await client.connect();
-            const db = client.db(); // Lägg till din databasnamn här
 
             // Försök att hämta användarens träningsdata
             const userMusclesTimer = await db.collection('userMusclesTimer').findOne({ userId: userId });
@@ -23,21 +31,9 @@ module.exports = async (req, res) => {
 
             // Skicka tillbaka användarens träningsdata
             return res.status(200).json(userMusclesTimer);
-        } catch (error) {
-            console.error('Database error:', error);
-            return res.status(500).send('Internal Server Error');
-        } finally {
-            // Stäng anslutningen till databasen
-            await client.close();
-        }
-    } else if (req.method === 'POST') {
-        try {
+        } else if (req.method === 'POST') {
             // Extract userId from URL parameters or body, depending on your API design
             const { userId } = req.body; // Or req.query, if you're passing userId in the query string
-
-            // Ensure the client is connected to the database
-            await client.connect();
-            const db = client.db(); // Add your database name here
 
             // Attempt to retrieve the user's muscle data
             const userMuscles = await db.collection('userMusclesTimer').findOne({ userId: userId });
@@ -63,15 +59,17 @@ module.exports = async (req, res) => {
             }
 
             res.json({ message: 'All muscle timers reset successfully' });
-        } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).send('Internal Server Error');
-        } finally {
-            // Close the database connection
+        } else {
+            // Handle other HTTP methods or return an error
+            res.status(405).send('Method Not Allowed');
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Internal Server Error');
+    } finally {
+        // Close the database connection if it was opened
+        if (client) {
             await client.close();
         }
-    } else {
-        // Handle other HTTP methods or return an error
-        res.status(405).send('Method Not Allowed');
     }
 };
