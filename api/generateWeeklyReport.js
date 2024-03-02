@@ -13,6 +13,37 @@ const connectToDatabase = async () => {
 };
 
 
+
+
+module.exports = async (req, res) => {
+    let client; // This will hold our MongoClient instance
+
+    try {
+        client = await connectToDatabase();
+        const db = client.db(); // Get the db instance from the client
+
+        if (req.method === 'GET') {
+            if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+                return res.status(401).send('Unauthorized');
+            }
+
+            // Call your logic function to create the weekly report
+            await createWeeklyReport(db);
+            return res.status(200).send('Weekly report generated');
+        } else {
+            return res.status(405).send('Method Not Allowed');
+        }
+    } catch (error) {
+        console.error('Error generating weekly report:', error);
+        return res.status(500).send('Internal Server Error');
+    } finally {
+        // Close the client connection if it was opened
+        if (client) {
+            await client.close();
+        }
+    }
+};
+
 const getWeekNumber = (date) => {
     const newDate = new Date(
         Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -35,34 +66,5 @@ const createWeeklyReport = async (db) => {
             weekOf: todaysWeekNumber
         };
         await db.collection('userWeeklyReport').insertOne(reportEntry);
-    }
-};
-
-module.exports = async (req, res) => {
-    let client; // This will hold our MongoClient instance
-
-    try {
-        client = await connectToDatabase();
-        const db = client.db(); // Get the db instance from the client
-
-        if (req.method === 'GET') {
-            if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
-                return res.status(401).send('Unauthorized');
-            }
-
-            // Call your logic function to create the weekly report
-            await createWeeklyReport(db);
-            return res.status(200).send('Weekly report generated');
-        } else {
-            return res.status(405).send('Method Not Allowed');
-        }
-    } catch (error) {
-        console.error('Error generating weekly report:', error);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        // Close the client connection if it was opened
-        if (client && client.close) {
-            await client.close();
-        }
     }
 };
