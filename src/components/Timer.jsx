@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const Timer = ({ trainingEnd }) => {
+const Timer = ({ trainingEnd, onRecoveryComplete }) => {
   const [formattedTrainingEnd, setFormattedTrainingEnd] = useState("");
   const [isRecoveryPast, setIsRecoveryPast] = useState(false);
 
@@ -13,6 +13,7 @@ const Timer = ({ trainingEnd }) => {
         if (trainedUntil < now) {
           setIsRecoveryPast(true);
           setFormattedTrainingEnd("");
+          onRecoveryComplete && onRecoveryComplete();
         } else {
           setIsRecoveryPast(false);
           const endFormatted = trainedUntil.toLocaleString("sv-SE", {
@@ -30,7 +31,7 @@ const Timer = ({ trainingEnd }) => {
     };
 
     checkRecoveryTime();
-  }, [trainingEnd]);
+  }, [trainingEnd, onRecoveryComplete]);
 
   return (
     <div className="Timer">

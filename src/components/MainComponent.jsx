@@ -9,6 +9,14 @@ const MainComponent = () => {
   const { muscleGroups, userId, isLoggedIn } = useMuscle();
   const [recoveryTimes, setRecoveryTimes] = useState({});
 
+  const handleRecoveryComplete = (muscleName) => {
+    setRecoveryTimes((prevRecoveryTimes) => {
+      const newRecoveryTimes = { ...prevRecoveryTimes };
+      delete newRecoveryTimes[muscleName];
+      return newRecoveryTimes;
+    });
+  };
+
   useEffect(() => {
     const fetchRecoveryTimes = async () => {
       if (userId && isLoggedIn) {
@@ -58,6 +66,7 @@ const MainComponent = () => {
                 userId={userId}
                 isLoggedIn={isLoggedIn}
                 trainingEnd={recoveryTimes[group.name]?.trainedUntil}
+                onRecoveryComplete={() => handleRecoveryComplete(group.name)}
               />
             </div>
           ))}
