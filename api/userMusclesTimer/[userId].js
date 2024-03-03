@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
 
         if (req.method === 'GET') {
             // Hämta userId från URL-parametern
-            const { userId } = req.query;
+            const { userId } = req.body;
 
             // Försök att hämta användarens träningsdata
             const userMusclesTimer = await db.collection('userMusclesTimer').findOne({ userId: userId });
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
             return res.status(200).json(userMusclesTimer);
         } else if (req.method === 'POST') {
             // Extract userId from URL parameters or body, depending on your API design
-            const { userId } = req.query; // Or req.query, if you're passing userId in the query string
+            const { userId } = req.body; // Or req.query, if you're passing userId in the query string
 
             // Attempt to retrieve the user's muscle data
             const userMuscles = await db.collection('userMusclesTimer').findOne({ userId: userId });
