@@ -27,14 +27,17 @@ const MuscleProvider = ({ children }) => {
   const [lastTrained, setLastTrained] = useState({});
 
   // ********** Static Data **********
-  const muscleGroups = useMemo(() => [
-    { name: "Bröst", restPeriod: 48 },
-    { name: "Rygg", restPeriod: 48 },
-    { name: "Ben", restPeriod: 72 },
-    { name: "Axlar", restPeriod: 48 },
-    { name: "Armar", restPeriod: 48 },
-    { name: "Mage", restPeriod: 24 },
-  ], []);
+  const muscleGroups = useMemo(
+    () => [
+      { name: "Bröst", restPeriod: 48 },
+      { name: "Rygg", restPeriod: 48 },
+      { name: "Ben", restPeriod: 72 },
+      { name: "Axlar", restPeriod: 48 },
+      { name: "Armar", restPeriod: 48 },
+      { name: "Mage", restPeriod: 24 },
+    ],
+    []
+  );
 
   const muscleImages = [
     { name: "Mage", src: require("../assets/abs1.png") },
@@ -92,12 +95,10 @@ const MuscleProvider = ({ children }) => {
       });
   };
 
-  // markerar de nedre
   const handleMarkAsTrained = async (muscleName) => {
     if (isLoggedIn) {
       try {
         const response = await markMuscleAsTrained(userId, muscleName);
-        // Uppdatera tillståndet eller UI baserat på svaret om det behövs
         setLastTrained({ muscleName, timestamp: Date.now() });
         console.log(response.message);
       } catch (error) {
@@ -108,7 +109,6 @@ const MuscleProvider = ({ children }) => {
     }
   };
 
-  // övre
   const markAsTrained = (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in för markera");
@@ -146,7 +146,6 @@ const MuscleProvider = ({ children }) => {
     addMuscleGroups(muscleGroups)
       .then((response) => console.log("Muscle groups added:", response))
       .catch((error) => console.error("Error adding muscle groups:", error));
-
   }, [muscleGroups]);
 
   useEffect(() => {

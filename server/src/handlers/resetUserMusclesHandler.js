@@ -1,6 +1,5 @@
 const { MongoClient } = require('mongodb');
 
-// Återanvänd databasanslutningen
 let cachedDb = null;
 
 async function connectToDatabase(uri) {
@@ -8,7 +7,7 @@ async function connectToDatabase(uri) {
         return cachedDb;
     }
     const client = await MongoClient.connect(process.env.MONGODB_URI);
-    cachedDb = client.db(); // Ange ditt faktiska databasnamn här
+    cachedDb = client.db();
     return cachedDb;
 }
 
@@ -27,7 +26,7 @@ module.exports = async (req, res) => {
         const db = await connectToDatabase(process.env.MONGODB_URI);
         const result = await db.collection('userMuscles').updateOne(
             { userId: userId },
-            { $set: { trainedMuscles: [] } } // Rensa trainedMuscles-arrayen
+            { $set: { trainedMuscles: [] } }
         );
 
         if (result.matchedCount === 0) {

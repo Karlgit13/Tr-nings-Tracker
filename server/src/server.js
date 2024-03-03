@@ -36,7 +36,7 @@ app.use(cors()); // Allow CORS for all domains
 // ********** Database Connection **********
 let db;
 const connectToDatabase = async () => {
-    if (db) return db; // Return existing connection if it exists
+    if (db) return db;
     const client = await MongoClient.connect(process.env.MONGODB_URI);
     db = client.db();
     return db;
@@ -66,6 +66,24 @@ app.use('/api', userMusclesTimerRoutes);
 app.use('/api/getUserWeeklyReport', getUserWeeklyReportRoute);
 
 
+const createWeeklyReport = async () => {
+    await connectToDatabase();
+
+    const users = await db.collection('userMuscles').find().toArray();
+    for (const user of users) {
+        const reportEntry = {
+            userId: user.userId,
+            trainedMuscles: user.trainedMuscles,
+            weekOf: new Date()
+        };
+        await db.collection('userWeeklyReport').insertOne(reportEntry);
+    }
+};
+
+cron.schedule('0 23 * * 0', () => {
+    createWeeklyReport();
+});
+
 
 // ********** Start Server **********
 app.listen(PORT, () => {
@@ -73,29 +91,3 @@ app.listen(PORT, () => {
 });
 
 
-// Function to be run every Sunday at 23:00
-const createWeeklyReport = async () => {
-    // Connect to the database if not already connected
-    await connectToDatabase();
-
-    // Query all users' trained muscles data
-    const users = await db.collection('userMuscles').find().toArray();
-
-    // Iterate over each user and create a weekly report
-    for (const user of users) {
-        // Create a report entry for the current week
-        const reportEntry = {
-            userId: user.userId,
-            trainedMuscles: user.trainedMuscles,
-            weekOf: new Date() // This date can be adjusted to the beginning of the current week if necessary
-        };
-
-        // Insert the report entry into the userWeeklyReport collection
-        await db.collection('userWeeklyReport').insertOne(reportEntry);
-    }
-};
-
-// Schedule the function to run every Sunday at 23:00
-cron.schedule('0 23 * * 0', () => {
-    createWeeklyReport();
-});
