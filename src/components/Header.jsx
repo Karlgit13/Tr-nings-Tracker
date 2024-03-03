@@ -83,7 +83,7 @@ const Header = () => {
                   <button
                     onClick={async () => {
                       await handleRecoveryResetClick(userId);
-                      // refreshPage();
+                      refreshPage();
                     }}
                     className="red-button"
                   >
