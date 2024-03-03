@@ -74,7 +74,7 @@ const Header = () => {
                   <button
                     onClick={async () => {
                       await handleWeekResetClick(userId);
-                      // refreshPage();
+                      refreshPage();
                     }}
                     className="red-button"
                   >
@@ -83,7 +83,7 @@ const Header = () => {
                   <button
                     onClick={async () => {
                       await handleRecoveryResetClick(userId);
-                      refreshPage();
+                      // refreshPage();
                     }}
                     className="red-button"
                   >
