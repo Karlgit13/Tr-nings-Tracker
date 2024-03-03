@@ -19,12 +19,12 @@ export const fetchUserWeeklyReport = async (userId) => {
 
 export const resetUserMuscleTimer = async (userId, muscleName) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/resetMuscleTimer/`, {
+        const response = await fetch(`${API_BASE_URL}/resetMuscleTimer/${userId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ muscleName, userId })
+            body: JSON.stringify({ muscleName })
         })
         if (!response.ok) {
             throw new Error("failed to reset muscle timer")
