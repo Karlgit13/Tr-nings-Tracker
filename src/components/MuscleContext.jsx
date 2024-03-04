@@ -103,7 +103,7 @@ const MuscleProvider = ({ children }) => {
     }
 
     const action = trainedMuscles.includes(muscleName) ? "unmark" : "mark";
-
+    const currentTime = Date.now();
     try {
       const response = await toggleMuscleTrainingStatus(
         userId,
@@ -112,11 +112,30 @@ const MuscleProvider = ({ children }) => {
       );
       if (action === "mark") {
         setTrainedMuscles((prevState) => [...prevState, muscleName]);
-        setLastTrained({ muscleName, timestamp: Date.now() });
+
+        const restPeriod =
+          muscleGroups.find((group) => group.name === muscleName)?.restPeriod ||
+          0;
+        const recoveryEndTime = new Date(
+          currentTime + restPeriod * 3600000
+        ).toISOString();
+
+        setRecoveryTimes((prevRecoveryTimes) => ({
+          ...prevRecoveryTimes,
+          [muscleName]: { trainedUntil: recoveryEndTime },
+        }));
+
+        setLastTrained({ muscleName, timestamp: currentTime });
       } else {
         setTrainedMuscles((prevState) =>
           prevState.filter((m) => m !== muscleName)
         );
+
+        setRecoveryTimes((prevRecoveryTimes) => {
+          const updatedRecoveryTimes = { ...prevRecoveryTimes };
+          delete updatedRecoveryTimes[muscleName];
+          return updatedRecoveryTimes;
+        });
       }
       console.log(response.message);
     } catch (error) {
