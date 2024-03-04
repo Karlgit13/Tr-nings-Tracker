@@ -14,16 +14,13 @@ const Header = () => {
     setIsClicked(!isClicked);
   };
 
-  const handleRecoveryResetClick = async (userId, muscleName) => {
+  const handleReset = async (userId, muscleName) => {
     try {
       const response = await resetUserMuscleTimer(userId, muscleName);
       console.log(response.message);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleWeekResetClick = async (userId) => {
     try {
       await resetUserMuscles(userId);
       console.log("muscles reset success");
@@ -73,21 +70,12 @@ const Header = () => {
 
                   <button
                     onClick={async () => {
-                      await handleWeekResetClick(userId);
+                      await handleReset(userId);
                       refreshPage();
                     }}
                     className="red-button"
                   >
-                    Återställ Vecka
-                  </button>
-                  <button
-                    onClick={async () => {
-                      await handleRecoveryResetClick(userId);
-                      refreshPage();
-                    }}
-                    className="red-button"
-                  >
-                    Återställ Återhämtning
+                    Återställ
                   </button>
                   <button
                     onClick={() => {
