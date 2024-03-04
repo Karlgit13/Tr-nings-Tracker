@@ -1,22 +1,15 @@
-const { MongoClient } = require('mongodb');
+const express = require('express');
+const router = express.Router();
 
-async function connectToDatabase(uri) {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    return client.db();
-}
+router.post('/muscleTraining', async (req, res) => {
+    const { userId, muscleName, action } = req.body;
+    const db = req.db;
 
-module.exports = async (req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Only POST requests allowed' });
+    if (!userId || !muscleName || !action) {
+        return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const { action, userId, muscleName } = req.body;
-    const uri = process.env.MONGODB_URI;
-
     try {
-        const db = await connectToDatabase(uri);
-
         if (action === 'mark') {
             const muscleGroup = await db.collection('muscles').findOne({ name: muscleName });
             if (!muscleGroup) {
@@ -61,6 +54,8 @@ module.exports = async (req, res) => {
         }
     } catch (error) {
         console.error("Database error:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        res.status(500).send("Internal Server Error");
     }
-};
+});
+
+module.exports = router;
