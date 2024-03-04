@@ -2,22 +2,24 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 
-export const unmarkMuscleAsTrained = async (userId, muscleName) => {
+
+// Combined function for toggling muscle training status
+export const toggleMuscleTrainingStatus = async (userId, muscleName, action) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/unmarkMuscleTrained`, {
-            method: "POST",
+        const response = await fetch(`${API_BASE_URL}/muscleTraining`, {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId, muscleName }),
+            body: JSON.stringify({ userId, muscleName, action }), // Include action in the body
         });
         if (!response.ok) {
-            throw new Error("Failed to unmark muscle as trained");
+            throw new Error(`Failed to ${action} muscle as trained`);
         }
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("Error unmarking muscle as trained:", error);
+        console.error(`Error ${action}ing muscle as trained:`, error);
         throw error;
     }
 };

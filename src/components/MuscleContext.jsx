@@ -4,7 +4,8 @@ import {
   getUserTrainedMuscles,
   addMuscleGroups,
   markMuscleAsTrained,
-  unmarkMuscleAsTrained
+  unmarkMuscleAsTrained,
+  toggleMuscleTrainingStatus,
 } from "./api";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -97,43 +98,41 @@ const MuscleProvider = ({ children }) => {
   };
 
   // Assuming unmarkMuscleAsTrained function exists and works similarly to markMuscleAsTrained
-const handleMarkAsTrained = async (muscleName) => {
-  if (!isLoggedIn) {
+  const handleMarkAsTrained = async (muscleName) => {
+    if (!isLoggedIn) {
       alert("Du måste logga in");
       return;
-  }
+    }
 
-  // Check if the muscle is already marked as trained
-  if (trainedMuscles.includes(muscleName)) {
-      // Muscle is currently marked as trained, so unmark it
-      try {
-          const response = await unmarkMuscleAsTrained(userId, muscleName);
-          // Update the trainedMuscles state to remove the muscle
-          setTrainedMuscles((prevState) => prevState.filter((m) => m !== muscleName));
-          console.log(response.message);
-      } catch (error) {
-          console.error("Error unmarking muscle as trained:", error);
+    // Determine the action based on whether the muscle is currently marked as trained
+    const action = trainedMuscles.includes(muscleName) ? "unmark" : "mark";
+
+    try {
+      const response = await toggleMuscleTrainingStatus(
+        userId,
+        muscleName,
+        action
+      );
+      // Update the trainedMuscles state based on the action performed
+      if (action === "mark") {
+        setTrainedMuscles((prevState) => [...prevState, muscleName]);
+        setLastTrained({ muscleName, timestamp: Date.now() });
+      } else {
+        setTrainedMuscles((prevState) =>
+          prevState.filter((m) => m !== muscleName)
+        );
       }
-  } else {
-      // Muscle is not marked as trained, so mark it
-      try {
-          const response = await markMuscleAsTrained(userId, muscleName);
-          // Update the trainedMuscles state to include the muscle
-          setTrainedMuscles((prevState) => [...prevState, muscleName]);
-          setLastTrained({ muscleName, timestamp: Date.now() }); // This maintains the existing functionality
-          console.log(response.message);
-      } catch (error) {
-          console.error("Error marking muscle as trained:", error);
-      }
-  }
-};
+      console.log(response.message);
+    } catch (error) {
+      console.error(`Error ${action}ing muscle as trained:`, error);
+    }
+  };
 
-// You might not need the separate markAsTrained function anymore, as handleMarkAsTrained now handles both marking and unmarking.
-// But if you decide to keep it for some reason, ensure it simply calls handleMarkAsTrained(muscleName);
-const markAsTrained = (muscleName) => {
-  handleMarkAsTrained(muscleName);
-};
-
+  // You might not need the separate markAsTrained function anymore, as handleMarkAsTrained now handles both marking and unmarking.
+  // But if you decide to keep it for some reason, ensure it simply calls handleMarkAsTrained(muscleName);
+  const markAsTrained = (muscleName) => {
+    handleMarkAsTrained(muscleName);
+  };
 
   // ********** Effects **********
   useEffect(() => {
