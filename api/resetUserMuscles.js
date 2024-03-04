@@ -1,7 +1,6 @@
 // api/resetUserMuscles.js
 const { MongoClient } = require('mongodb');
 
-// Reuse the database connection
 let cachedDb = null;
 
 
@@ -10,7 +9,7 @@ async function connectToDatabase(uri) {
         return cachedDb;
     }
     const client = await MongoClient.connect(process.env.MONGODB_URI);
-    cachedDb = client.db(); // Ersätt med ditt faktiska databasnamn
+    cachedDb = client.db();
     return cachedDb;
 }
 
@@ -19,9 +18,7 @@ module.exports = async (req, res) => {
         return res.status(405).json({ message: 'Only POST method is allowed' });
     }
 
-    // Du kan behöva verifiera att användaren är behörig att återställa träningen här
-
-    const { userId } = req.body; // userId skickas i begärans body
+    const { userId } = req.body;
 
     if (!userId) {
         return res.status(400).json({ message: 'UserId is required in the request body' });
@@ -31,7 +28,7 @@ module.exports = async (req, res) => {
         const db = await connectToDatabase(process.env.MONGODB_URI);
         const result = await db.collection('userMuscles').updateOne(
             { userId: userId },
-            { $set: { trainedMuscles: [] } } // Rensar trainedMuscles-arrayen
+            { $set: { trainedMuscles: [] } }
         );
 
         if (result.matchedCount === 0) {

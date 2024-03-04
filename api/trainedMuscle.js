@@ -1,7 +1,6 @@
 // api/trainedMuscle.js
 const { MongoClient } = require('mongodb');
 
-// Reuse the database connection
 let cachedDb = null;
 
 async function connectToDatabase(uri) {
@@ -9,7 +8,7 @@ async function connectToDatabase(uri) {
         return cachedDb;
     }
     const client = await MongoClient.connect(uri);
-    const db = client.db(); // Explicitly specify the database name
+    const db = client.db();
     cachedDb = db;
     return db;
 }
@@ -19,7 +18,6 @@ module.exports = async (req, res) => {
         return res.status(405).send('Only POST method is allowed');
     }
 
-    // Destructure both userId and muscleName from the request body
     const { userId, muscleName } = req.body;
 
     if (!userId || !muscleName) {
@@ -28,11 +26,10 @@ module.exports = async (req, res) => {
 
     try {
         const db = await connectToDatabase(process.env.MONGODB_URI);
-        // Assume that the user's collection of trained muscles is an array
         const result = await db.collection('userMuscles').updateOne(
             { userId: userId },
-            { $addToSet: { trainedMuscles: muscleName } }, // $addToSet avoids duplicates
-            { upsert: true } // Creates a new document if no document matches the query
+            { $addToSet: { trainedMuscles: muscleName } },
+            { upsert: true }
         );
 
         if (result.modifiedCount === 0 && result.upsertedCount === 0) {

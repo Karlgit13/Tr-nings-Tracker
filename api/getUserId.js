@@ -1,19 +1,17 @@
-// api/getUserId.js
-
 const { MongoClient } = require('mongodb');
+
 const uri = process.env.MONGODB_URI;
 let db = null;
 
-// Function to connect to the database
 async function connectToDatabase() {
-    if (db) return db; // Return existing connection if it's already established
+    if (db) return db;
     const client = await MongoClient.connect(uri);
     db = client.db();
     return db;
 }
 
 module.exports = async (req, res) => {
-    const identifier = req.query.identifier; // Access query parameters
+    const identifier = req.query.identifier;
     if (!identifier) {
         return res.status(400).json({ error: 'Identifier is required' });
     }
@@ -24,7 +22,7 @@ module.exports = async (req, res) => {
         const user = await collection.findOne({ $or: [{ email: identifier }, { name: identifier }] });
 
         if (user) {
-            res.json({ userId: user._id.toString() }); // Ensure _id is converted to string if necessary
+            res.json({ userId: user._id.toString() });
         } else {
             res.status(404).json({ error: 'User not found' });
         }

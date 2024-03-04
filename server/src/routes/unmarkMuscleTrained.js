@@ -1,16 +1,13 @@
-// Assuming you have a router set up in your Express app
 const express = require('express');
 const router = express.Router();
 
 router.post('/unmarkMuscleTrained', async (req, res) => {
     const { userId, muscleName } = req.body;
-    const db = req.db; // Make sure you have a way to access your database instance
-
+    const db = req.db;
     try {
-        // Assuming your database schema, update the document to unmark the muscle as trained
         const result = await db.collection('userMusclesTimer').updateOne(
             { userId: userId },
-            { $unset: { [`trainedMuscles.${muscleName}`]: "" } } // This removes the muscle's trained status
+            { $unset: { [`trainedMuscles.${muscleName}`]: "" } }
         );
 
         if (result.modifiedCount === 0) {

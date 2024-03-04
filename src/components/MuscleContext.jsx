@@ -1,10 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
-  updateTrainedMuscle,
   getUserTrainedMuscles,
   addMuscleGroups,
-  markMuscleAsTrained,
-  unmarkMuscleAsTrained,
   toggleMuscleTrainingStatus,
 } from "./api";
 
@@ -97,14 +94,12 @@ const MuscleProvider = ({ children }) => {
       });
   };
 
-  // Assuming unmarkMuscleAsTrained function exists and works similarly to markMuscleAsTrained
   const handleMarkAsTrained = async (muscleName) => {
     if (!isLoggedIn) {
       alert("Du måste logga in");
       return;
     }
 
-    // Determine the action based on whether the muscle is currently marked as trained
     const action = trainedMuscles.includes(muscleName) ? "unmark" : "mark";
 
     try {
@@ -113,7 +108,6 @@ const MuscleProvider = ({ children }) => {
         muscleName,
         action
       );
-      // Update the trainedMuscles state based on the action performed
       if (action === "mark") {
         setTrainedMuscles((prevState) => [...prevState, muscleName]);
         setLastTrained({ muscleName, timestamp: Date.now() });
@@ -128,8 +122,6 @@ const MuscleProvider = ({ children }) => {
     }
   };
 
-  // You might not need the separate markAsTrained function anymore, as handleMarkAsTrained now handles both marking and unmarking.
-  // But if you decide to keep it for some reason, ensure it simply calls handleMarkAsTrained(muscleName);
   const markAsTrained = (muscleName) => {
     handleMarkAsTrained(muscleName);
   };

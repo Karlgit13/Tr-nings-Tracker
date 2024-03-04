@@ -1,17 +1,15 @@
-// Importera nödvändiga moduler
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 
-let db; // Variabel för att lagra databasobjektet
+let db;
 
-// Funktion för att ansluta till databasen
+
 const connectToDatabase = async () => {
-    if (db) return; // Om databasobjektet redan finns, returnera
+    if (db) return;
     const client = await MongoClient.connect(process.env.MONGODB_URI);
-    db = client.db(); // Sätt databasobjektet till det anslutna klientobjektets databas
+    db = client.db();
 };
 
-// Exportera en asynkron funktion som hanterar en POST-förfrågan för att registrera en ny användare
 module.exports = async (req, res) => {
     console.log('Request received', req.method, req.body);
 

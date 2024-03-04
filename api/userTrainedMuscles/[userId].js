@@ -1,7 +1,5 @@
-// Importera MongoDB-klienten om du behöver ansluta till en databas
 const { MongoClient } = require('mongodb');
 
-// En funktion för att ansluta till databasen, återanvänd gärna en tidigare etablerad anslutning
 let cachedDb = null;
 async function connectToDatabase(uri) {
     if (cachedDb) {
@@ -9,12 +7,12 @@ async function connectToDatabase(uri) {
     }
     const client = new MongoClient(uri);
     await client.connect();
-    cachedDb = client.db(); // Ange databasnamnet här
+    cachedDb = client.db();
     return cachedDb;
 }
 
 module.exports = async (req, res) => {
-    const { userId } = req.query; // Dynamiskt parameter 'userId' extraheras från URL:en
+    const { userId } = req.query;
 
     if (!userId) {
         return res.status(400).json({ error: 'UserId is required' });
