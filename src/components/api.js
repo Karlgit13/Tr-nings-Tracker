@@ -2,6 +2,28 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 
+export const unmarkMuscleAsTrained = async (userId, muscleName) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/unmarkMuscleTrained`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, muscleName }),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to unmark muscle as trained");
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error unmarking muscle as trained:", error);
+        throw error;
+    }
+};
+
+
+
 export const fetchUserWeeklyReport = async (userId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/getUserWeeklyReport?userId=${userId}`);

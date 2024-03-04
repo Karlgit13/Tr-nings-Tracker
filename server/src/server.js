@@ -23,6 +23,7 @@ const userTrainedMusclesRoute = require('./routes/userTrainedMusclesRoute');
 const markMuscleTrainedRoutes = require('./routes/markMuscleTrainedRoutes');
 const userMusclesTimerRoutes = require('./routes/userMusclesTimerRoutes');
 const getUserWeeklyReportRoute = require('./routes/getUserWeeklyReport');
+const unmarkMuscleTrainedRoute = require('./routes/unmarkMuscleTrained');
 
 
 // ********** Express App Setup **********
@@ -64,6 +65,7 @@ app.use('/api/userTrainedMuscles', userTrainedMusclesRoute);
 app.use("/api", markMuscleTrainedRoutes)
 app.use('/api', userMusclesTimerRoutes);
 app.use('/api/getUserWeeklyReport', getUserWeeklyReportRoute);
+app.use("/api", unmarkMuscleTrainedRoute);
 
 
 const createWeeklyReport = async () => {
