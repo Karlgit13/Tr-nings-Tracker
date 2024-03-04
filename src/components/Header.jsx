@@ -7,8 +7,18 @@ import { resetUserMuscles, resetUserMuscleTimer } from "./api";
 import LiveClock from "react-live-clock";
 
 const Header = () => {
-  const { isLoggedIn, setIsloggedIn, userId, setUserId } = useMuscle();
+  const { isLoggedIn, setIsloggedIn, userId, setUserId, dayMode, setDayMode } =
+    useMuscle();
   const [isClicked, setIsClicked] = useState();
+
+  const handleDayNightMode = () => {
+    setDayMode(!dayMode);
+    localStorage.setItem("dayMode", !dayMode ? "night" : "day");
+  };
+
+  useEffect(() => {
+    document.body.className = dayMode ? "day-mode" : "night-mode";
+  }, [dayMode]);
 
   const handleClickOutside = (event) => {
     if (isClicked && !event.target.closest(".dropdown-menu")) {
@@ -24,6 +34,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("click", handleClickOutside);
     };
+    // eslint-disable-next-line
   }, [isClicked]);
 
   const toggleBurgare = () => {
@@ -31,17 +42,22 @@ const Header = () => {
   };
 
   const handleReset = async (userId, muscleName) => {
-    try {
-      const response = await resetUserMuscleTimer(userId, muscleName);
-      console.log(response.message);
-    } catch (error) {
-      console.error(error);
-    }
-    try {
-      await resetUserMuscles(userId);
-      console.log("muscles reset success");
-    } catch (error) {
-      console.error("fail", error);
+    const isConfirm = window.confirm(
+      "Alla muskler samt återhämtningstider kommer återställas. är du säker?"
+    );
+    if (isConfirm) {
+      try {
+        const response = await resetUserMuscleTimer(userId, muscleName);
+        console.log(response.message);
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+        await resetUserMuscles(userId);
+        console.log("muscles reset success");
+      } catch (error) {
+        console.error("fail", error);
+      }
     }
   };
 
@@ -73,15 +89,27 @@ const Header = () => {
       <div className="relative">
         {isLoggedIn ? (
           <div>
-            <img
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleBurgare();
-              }}
-              src={Burgare}
-              alt={Burgare}
-              className=" w-12 cursor-pointer mr-1"
-            />
+            <div className="flex place-items-center">
+              <img
+                className=" w-32"
+                src={
+                  dayMode
+                    ? require("../assets/dayMode.png")
+                    : require("../assets/nightMode.png")
+                }
+                onClick={handleDayNightMode}
+                alt=""
+              />
+              <img
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleBurgare();
+                }}
+                src={Burgare}
+                alt={Burgare}
+                className=" w-12 h-12 cursor-pointer mr-1"
+              />
+            </div>
 
             {isClicked && (
               <div className="dropdown-menu flex flex-col absolute p-8 bg-[#01112b] z-10 right-0 gap-1 -mr-5 rounded w-[200px] md:w-[350px]">

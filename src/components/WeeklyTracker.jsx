@@ -32,7 +32,7 @@ const WeeklyTracker = () => {
                 alt={group.name}
               />
               {trainedMuscles.includes(group.name) && (
-                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-blue-600">
+                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-6xl text-red-500">
                   &#10004;
                 </span>
               )}

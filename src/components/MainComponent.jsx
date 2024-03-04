@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Timer from "./Timer";
 import WeeklyTracker from "./WeeklyTracker";
 import Header from "./Header";
@@ -6,8 +6,8 @@ import { useMuscle } from "./MuscleContext";
 import { getUserTrainingEndTimes } from "./api";
 
 const MainComponent = () => {
-  const { muscleGroups, userId, isLoggedIn } = useMuscle();
-  const [recoveryTimes, setRecoveryTimes] = useState({});
+  const { muscleGroups, userId, isLoggedIn, recoveryTimes, setRecoveryTimes } =
+    useMuscle();
 
   const handleRecoveryComplete = (muscleName) => {
     setRecoveryTimes((prevRecoveryTimes) => {
@@ -32,7 +32,7 @@ const MainComponent = () => {
     };
 
     fetchRecoveryTimes();
-  }, [userId, isLoggedIn, recoveryTimes]);
+  }, [userId, isLoggedIn, setRecoveryTimes]);
 
   return (
     <div className="MainComponent">

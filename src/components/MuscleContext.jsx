@@ -24,6 +24,8 @@ const MuscleProvider = ({ children }) => {
   const [identifier, setIdentifier] = useState("");
   const [userId, setUserId] = useState("");
   const [lastTrained, setLastTrained] = useState({});
+  const [recoveryTimes, setRecoveryTimes] = useState({});
+  const [dayMode, setDayMode] = useState(true);
 
   // ********** Static Data **********
   const muscleGroups = useMemo(
@@ -182,6 +184,10 @@ const MuscleProvider = ({ children }) => {
     lastTrained,
     setLastTrained,
     handleMarkAsTrained,
+    recoveryTimes,
+    setRecoveryTimes,
+    dayMode,
+    setDayMode,
   };
 
   return (
