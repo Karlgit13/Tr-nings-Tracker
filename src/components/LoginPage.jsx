@@ -42,7 +42,7 @@ function LoginPage() {
         <h1 className="p-2 text-white font-serif">Logga in</h1>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-1 w-4/5 max-w-xs mb-24"
+          className="flex flex-col gap-1 w-4/5 max-w-xs mb-24 text-black"
         >
           {error && <p>{error}</p>}
           <input

@@ -40,11 +40,11 @@ const SavedData = () => {
   return (
     <div>
       <Header />
-      <div className="flex justify-center p-4 text-white textShadow">
+      <div className="flex justify-center p-4">
         <h1>Här lagras dina veckor</h1>
       </div>
-      <div className="WeekNow flex flex-col w-full place-items-center textShadow p-4">
-        <div className="text-white bg-blue-500 w-[90vw] p-2 rounded">
+      <div className="WeekNow flex flex-col w-full place-items-center p-4">
+        <div className=" bg-[#01112b] text-white w-[90vw] p-2 rounded">
           <h3 className="text-center">
             Nuvarande Vecka{" "}
             <span className="text-red-500">
@@ -69,9 +69,9 @@ const SavedData = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col w-full place-items-center textShadow p-4">
+      <div className="flex flex-col w-full place-items-center p-4">
         {weeklyReports.length > 0 ? (
-          <div className="text-white bg-blue-500 w-[90vw] p-2 rounded">
+          <div className=" bg-[#01112b] text-white w-[90vw] p-2 rounded">
             {weeklyReports.map((report, index) => (
               <div key={index}>
                 <h3 className="text-center">
@@ -97,7 +97,7 @@ const SavedData = () => {
             ))}
           </div>
         ) : (
-          <p className="p-2 text-white">Ingen data.</p>
+          <p className="p-2">Ingen data.</p>
         )}
       </div>
     </div>

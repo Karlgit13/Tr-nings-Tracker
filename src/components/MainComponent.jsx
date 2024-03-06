@@ -38,10 +38,10 @@ const MainComponent = () => {
     <div className="MainComponent">
       <Header />
       <WeeklyTracker />
-      <h1 className="mt-8 text-center text-white mb-3 textShadow">
+      <h1 className="mt-8 text-center">
         Återhämtnings Tider:
       </h1>
-      <div className="MainComponent flex flex-col place-items-center  justify-center w-full text-white gap-y-2">
+      <div className="MainComponent flex flex-col place-items-center  justify-center w-full  gap-y-2">
         {muscleGroups
           .filter(
             (group) =>
@@ -55,10 +55,10 @@ const MainComponent = () => {
           )
           .map((group) => (
             <div
-              className="MuskelGrupperDiv bg-blue-500 p-2 rounded w-[90vw] max-w-sm text-left text-black"
+              className="MuskelGrupperDiv bg-[#01112b] p-2 rounded w-[90vw] max-w-sm text-left"
               key={group.name}
             >
-              <h3 className="text-red-500 font-bold text-lg md:text-xl textShadow mb-1">
+              <h3 className="text-white font-bold text-lg md:text-xl textShadow mb-1">
                 {group.name}
               </h3>
               <Timer

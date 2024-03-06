@@ -36,9 +36,9 @@ const Timer = ({ trainingEnd, onRecoveryComplete }) => {
   return (
     <div className="Timer">
       {!isRecoveryPast && formattedTrainingEnd.length > 0 && (
-        <p className="p-timer flex justify-between">
-          <span className=" text-white textShadow">Återhämtning till</span>
-          <span className="text-white textShadow">
+        <p className="p-timer flex justify-between text-white">
+          <span className=" ">Återhämtning till</span>
+          <span className="">
             {" "}
             <img src={require("../assets/arrow.png")} alt="" />{" "}
           </span>

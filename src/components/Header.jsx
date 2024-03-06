@@ -9,11 +9,12 @@ import LiveClock from "react-live-clock";
 const Header = () => {
   const { isLoggedIn, setIsloggedIn, userId, setUserId, dayMode, setDayMode } =
     useMuscle();
-  const [isClicked, setIsClicked] = useState();
+  const [isClicked, setIsClicked] = useState(false);
 
   const handleDayNightMode = () => {
+    const newMode = !dayMode ? "day" : "night";
     setDayMode(!dayMode);
-    localStorage.setItem("dayMode", !dayMode ? "night" : "day");
+    localStorage.setItem("dayMode", newMode);
   };
 
   useEffect(() => {

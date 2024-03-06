@@ -13,14 +13,14 @@ const WeeklyTracker = () => {
 
   return (
     <div className="WeeklyTracker">
-      <h2 className="text-lg text-center mt-5 text-white textShadow">
+      <h2 className="text-lg text-center mt-5 textShadow">
         Vecka <span className="text-red-500">{currentWeek}</span> träning
       </h2>
       <div className="WeeklyTracker flex flex-row justify-center flex-wrap p-4">
         {muscleGroups.map((group, index) => (
           <div key={index}>
             <button
-              className={`font-poppins text-[#edefee]  m-[1vw] flex-1 text-center bg-transparent border-none cursor-pointer relative text-shadow  ${
+              className={`m-[1vw] flex-1 text-center bg-transparent border-none cursor-pointer relative text-shadow  ${
                 trainedMuscles.includes(group.name) ? "opacity-50" : ""
               }`}
               onClick={() => markAsTrained(group.name)}
@@ -42,7 +42,7 @@ const WeeklyTracker = () => {
         ))}
       </div>
       {allMusclesTrained && (
-        <p className="font-poppins mt-[-10px] text-center p-4 font-bold text-shadow text-white textShadow">
+        <p className="font-poppins mt-[-10px] text-center p-4 font-bold">
           Bra jobbat! <br /> Alla muskler har tränats denna vecka!
         </p>
       )}

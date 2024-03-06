@@ -25,7 +25,9 @@ const MuscleProvider = ({ children }) => {
   const [userId, setUserId] = useState("");
   const [lastTrained, setLastTrained] = useState({});
   const [recoveryTimes, setRecoveryTimes] = useState({});
-  const [dayMode, setDayMode] = useState(true);
+  const [dayMode, setDayMode] = useState(
+    localStorage.getItem("dayMode") === "night" ? false : true
+  );
 
   // ********** Static Data **********
   const muscleGroups = useMemo(
